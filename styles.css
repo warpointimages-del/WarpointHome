@@ -1,0 +1,304 @@
+@font-face {
+    font-family: 'Onder';
+    src: url('fonts/Onder.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('fonts/UbuntuRegular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('fonts/UbuntuBold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #323549;
+    font-family: 'Ubuntu', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+    color: #eaeefc;
+}
+
+.app {
+    max-width: 100vw;
+    min-height: 100vh;
+    padding: 1rem 2rem 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+/* общие стили для логотипов */
+.logo-full, .logo-short {
+    height: 8vh;
+    min-height: 44px;
+    width: auto;
+    object-fit: contain;
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+/* HOME */
+.home .logo-container {
+    position: absolute;
+    left: 50%;
+    top: 2rem;
+    transform: translateX(-50%);
+    width: fit-content;
+    overflow: hidden;
+}
+
+.home .logo-short {
+    display: none;
+}
+
+.home .logo-full {
+    display: block;
+}
+
+/* INNER */
+.inner .logo-container {
+    position: absolute;
+    left: 2rem;
+    top: 2rem;
+    transform: none;
+    width: fit-content;
+    overflow: hidden;
+}
+
+.inner .logo-full {
+    display: none;
+}
+
+.inner .logo-short {
+    display: block;
+    cursor: pointer;
+    height: 8vh;
+    min-height: 44px;
+}
+
+.logo-container {
+    transition: left 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+    z-index: 10;
+}
+
+.logo-link {
+    display: inline-block;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+}
+
+.logo-svg-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+}
+
+/* АНИМАЦИЯ */
+body.morphing.home .logo-container {
+    animation: moveLeft 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+body.morphing.home .logo-full {
+    display: block;
+    transform-origin: left center;
+    width: auto;
+    max-width: none;
+}
+
+body.morphing.home .logo-short {
+    display: none;
+}
+
+body.morphing.inner .logo-container {
+    animation: moveRight 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+body.morphing.inner .logo-short {
+    display: block;
+    animation: hideShort 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+body.morphing.inner .logo-full {
+    display: block;
+    transform-origin: left center;
+    animation: cropAndGrow 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes moveLeft {
+    0% {
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 100vw;
+    }
+    100% {
+        left: 2rem;
+        transform: translateX(0);
+        /* ================================================================= */
+        /* ЗНАЧЕНИЕ MAX-WIDTH ДЛЯ КОРОТКОГО ЛОГОТИПА (СКОЛЬКО ТЕКСТА ОБРЕЗАТЬ) */
+        /* Сейчас 90px - регулируй эту цифру, чтобы логотип на внутренней     */
+        /* странице был ровно по ширине буквы, без лишнего обрезания текста  */
+        /* ================================================================= */
+        max-width: 90px;
+    }
+}
+
+@keyframes moveRight {
+    0% {
+        left: 2rem;
+        transform: translateX(0);
+        /* ================================================================= */
+        /* ЗНАЧЕНИЕ MAX-WIDTH ДЛЯ СТАРТА АНИМАЦИИ (ДОЛЖНО СОВПАДАТЬ С ВЫШЕ) */
+        /* Меняй одновременно с верхним значением, чтобы не было скачков     */
+        /* ================================================================= */
+        max-width: 90px;
+    }
+    100% {
+        left: 52.5%;
+        transform: translateX(-50%);
+        max-width: 100vw;
+    }
+}
+
+@keyframes hideShort {
+    0% { opacity: 1; }
+    5% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+@keyframes cropAndGrow {
+    0% {
+        opacity: 0;
+        clip-path: inset(0 25% 0 0);
+    }
+    5% {
+        opacity: 1;
+        clip-path: inset(0 25% 0 0);
+    }
+    100% {
+        opacity: 1;
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+/* КОНТЕНТ */
+.page-indicator {
+    color: #b9bff2;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: rgba(0,0,0,0.2);
+    padding: 0.4rem 1.2rem;
+    border-radius: 40px;
+    align-self: center;
+    margin-top: 2rem;
+    backdrop-filter: blur(2px);
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: normal;
+}
+
+/* Стили для карточек-навигации на главной */
+.home-content {
+    width: 100%;
+    max-width: 800px;
+    margin-top: 25vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.nav-card {
+    flex: 1 1 200px;
+    min-width: 180px;
+    background: #3d405b;
+    padding: 2rem 1rem;
+    border-radius: 24px;
+    border: 2px solid #5f6382;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    text-decoration: none;
+    color: #eaeefc;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 0.02em;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.nav-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+}
+
+.nav-card:active {
+    transform: translateY(0);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+}
+
+/* контент для внутренних страниц (пустой, кроме h2) */
+.inner-content {
+    width: 100%;
+    max-width: 650px;
+    margin-top: 20vh;
+    text-align: center;
+}
+
+.inner-content h2 {
+    font-family: 'Onder', cursive;
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    color: #ffffff;
+    text-shadow: 0 4px 0 #2a2c3b;
+}
+
+img {
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.home .logo-full {
+    margin: 0 auto;
+}
+
+@media (orientation: landscape) {
+    .home .logo-container {
+        top: 2rem;
+    }
+    .inner .logo-container {
+        top: 2rem;
+    }
+    .home-content {
+        margin-top: 20vh;
+    }
+    .inner-content {
+        margin-top: 15vh;
+    }
+}
