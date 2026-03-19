@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Logo morph · восхитительный переход</title>
+    <title>Logo morph · perfect both ways</title>
     <style>
         * {
             margin: 0;
@@ -27,7 +27,7 @@
             position: relative;
         }
 
-        /* логотипы - одинаковая высота */
+        /* общие стили для логотипов - одинаковая высота */
         .logo-full, .logo-short {
             height: 8vh;
             min-height: 44px;
@@ -38,13 +38,14 @@
             outline: none;
         }
 
-        /* HOME */
+        /* HOME: широкий логотип (буква + текст) */
         .home .logo-container {
             position: absolute;
             left: 50%;
             top: 15vh;
             transform: translateX(-50%);
             width: fit-content;
+            overflow: hidden;
         }
 
         .home .logo-short {
@@ -55,13 +56,14 @@
             display: block;
         }
 
-        /* INNER */
+        /* INNER: короткий логотип (только буква) */
         .inner .logo-container {
             position: absolute;
             left: 2rem;
             top: 1.5rem;
             transform: none;
             width: fit-content;
+            overflow: hidden;
         }
 
         .inner .logo-full {
@@ -74,7 +76,9 @@
         }
 
         .logo-container {
-            transition: all 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+            transition: left 0.6s cubic-bezier(0.65, 0, 0.35, 1), 
+                        top 0.6s cubic-bezier(0.65, 0, 0.35, 1), 
+                        transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
             z-index: 10;
         }
 
@@ -92,125 +96,93 @@
             width: fit-content;
         }
 
-        /* ----- АНИМАЦИЯ (оба направления плавные) ----- */
-        body.morphing .logo-full,
-        body.morphing .logo-short {
-            display: block;
-        }
-
-        /* home → inner */
+        /* АНИМАЦИЯ: обрезаем широкий логотип справа */
         body.morphing.home .logo-container {
-            animation: flyToCorner 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            animation: moveAndClip 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
+        /* обратная анимация: разворачиваем широкий логотип */
+        body.morphing.inner .logo-container {
+            animation: moveAndExpand 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+        }
+
+        @keyframes moveAndClip {
+            0% {
+                left: 50%;
+                top: 15vh;
+                transform: translateX(-50%);
+                max-width: 100vw;
+            }
+            100% {
+                left: 2rem;
+                top: 1.5rem;
+                transform: translateX(0);
+                max-width: 44px;
+            }
+        }
+
+        @keyframes moveAndExpand {
+            0% {
+                left: 2rem;
+                top: 1.5rem;
+                transform: translateX(0);
+                max-width: 44px;
+            }
+            100% {
+                left: 50%;
+                top: 15vh;
+                transform: translateX(-50%);
+                max-width: 100vw;
+            }
+        }
+
+        /* широкий логотип внутри контейнера с обрезкой */
         body.morphing.home .logo-full {
-            animation: fadeOutFull 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            display: block;
             transform-origin: left center;
+            width: auto;
+            max-width: none;
         }
 
         body.morphing.home .logo-short {
-            animation: fadeInShort 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-            transform-origin: left center;
-        }
-
-        /* inner → home */
-        body.morphing.inner .logo-container {
-            animation: flyToCenter 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            display: none;
         }
 
         body.morphing.inner .logo-short {
+            display: block;
             animation: fadeOutShort 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-            transform-origin: left center;
         }
 
         body.morphing.inner .logo-full {
-            animation: fadeInFull 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            display: block;
             transform-origin: left center;
-        }
-
-        @keyframes flyToCorner {
-            0% {
-                left: 50%;
-                top: 15vh;
-                transform: translateX(-50%);
-            }
-            100% {
-                left: 2rem;
-                top: 1.5rem;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes flyToCenter {
-            0% {
-                left: 2rem;
-                top: 1.5rem;
-                transform: translateX(0);
-            }
-            100% {
-                left: 50%;
-                top: 15vh;
-                transform: translateX(-50%);
-            }
-        }
-
-        @keyframes fadeOutFull {
-            0% {
-                opacity: 1;
-                transform: scaleX(1);
-            }
-            50% {
-                opacity: 0.5;
-                transform: scaleX(0.6);
-            }
-            100% {
-                opacity: 0;
-                transform: scaleX(0.2);
-            }
-        }
-
-        @keyframes fadeInShort {
-            0% {
-                opacity: 0;
-                transform: scaleX(0.2);
-            }
-            50% {
-                opacity: 0.5;
-                transform: scaleX(0.6);
-            }
-            100% {
-                opacity: 1;
-                transform: scaleX(1);
-            }
+            animation: fadeInFull 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
         @keyframes fadeOutShort {
             0% {
                 opacity: 1;
-                transform: scaleX(1);
             }
             50% {
-                opacity: 0.5;
-                transform: scaleX(0.6);
+                opacity: 0.3;
             }
             100% {
                 opacity: 0;
-                transform: scaleX(0.2);
             }
         }
 
         @keyframes fadeInFull {
             0% {
                 opacity: 0;
-                transform: scaleX(0.2);
+                clip-path: inset(0 70% 0 0);
             }
             50% {
                 opacity: 0.5;
-                transform: scaleX(0.6);
+                clip-path: inset(0 35% 0 0);
             }
             100% {
                 opacity: 1;
-                transform: scaleX(1);
+                clip-path: inset(0 0 0 0);
             }
         }
 
@@ -291,8 +263,9 @@
             .home .logo-container {
                 top: 8vh;
             }
-            .inner .logo-short {
-                height: 12vh;
+            .inner .logo-container {
+                left: 2rem;
+                top: 1.5rem;
             }
             .nav-links {
                 margin-top: 25vh;
@@ -320,8 +293,8 @@
         <div id="innerPageContent" style="width: 100%; display: none; justify-content: center;">
             <div class="content-box">
                 ✦ внутренняя страница ✦<br>
-                плавнейший переход в обе стороны<br>
-                <span style="color: #b9adff;">логотипы не меняют размер относительно друг друга</span>
+                теперь обратный переход тоже плавный<br>
+                <span style="color: #b9adff;">текст наплывает справа</span>
             </div>
         </div>
     </div>
@@ -333,6 +306,7 @@
             const logoBtn = document.getElementById('logoButton');
             const pageLabel = document.getElementById('pageLabel');
             const innerContent = document.getElementById('innerPageContent');
+            const logoContainer = document.querySelector('.logo-container');
             
             let isAnimating = false;
 
@@ -354,11 +328,13 @@
                         body.classList.add('inner');
                         pageLabel.innerText = 'внутренняя · короткий логотип';
                         innerContent.style.display = 'flex';
+                        logoContainer.style.maxWidth = '';
                     } else {
                         body.classList.remove('inner');
                         body.classList.add('home');
                         pageLabel.innerText = 'главная · широкий логотип';
                         innerContent.style.display = 'none';
+                        logoContainer.style.maxWidth = '';
                     }
                     
                     body.classList.remove('morphing');
@@ -376,7 +352,17 @@
 
             document.querySelectorAll('.logo-full, .logo-short').forEach(img => {
                 img.onerror = function() {
-                    // ничего не делаем, просто игнорируем
+                    if (this.classList.contains('logo-short')) {
+                        this.style.backgroundColor = '#8a6de9';
+                        this.style.width = '44px';
+                        this.style.height = '44px';
+                        this.style.borderRadius = '8px';
+                    } else {
+                        this.style.backgroundColor = '#8a6de9';
+                        this.style.width = '120px';
+                        this.style.height = '44px';
+                        this.style.borderRadius = '8px';
+                    }
                 };
             });
 
