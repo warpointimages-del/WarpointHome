@@ -3,8 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Logo morph · идеальный баланс</title>
+    <title>Logo morph · с шрифтами и контентом</title>
     <style>
+        @font-face {
+            font-family: 'Onder';
+            src: url('fonts/Onder.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Ubuntu';
+            src: url('fonts/UbuntuRegular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'Ubuntu';
+            src: url('fonts/UbuntuBold.woff2') format('woff2');
+            font-weight: bold;
+            font-style: normal;
+            font-display: swap;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,8 +37,9 @@
 
         body {
             background-color: #323549;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Ubuntu', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
+            color: #eaeefc;
         }
 
         .app {
@@ -27,7 +52,7 @@
             position: relative;
         }
 
-        /* общие стили для логотипов - одинаковая высота */
+        /* общие стили для логотипов */
         .logo-full, .logo-short {
             height: 8vh;
             min-height: 44px;
@@ -38,7 +63,7 @@
             outline: none;
         }
 
-        /* HOME: широкий логотип */
+        /* HOME */
         .home .logo-container {
             position: absolute;
             left: 50%;
@@ -56,11 +81,11 @@
             display: block;
         }
 
-        /* INNER: короткий логотип */
+        /* INNER */
         .inner .logo-container {
             position: absolute;
             left: 2rem;
-            top: 15vh;  /* та же вертикальная позиция, что и на главной */
+            top: 15vh;
             transform: none;
             width: fit-content;
             overflow: hidden;
@@ -96,7 +121,7 @@
             width: fit-content;
         }
 
-        /* АНИМАЦИЯ: с главной на побочную */
+        /* АНИМАЦИЯ */
         body.morphing.home .logo-container {
             animation: moveLeft 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
@@ -112,7 +137,6 @@
             display: none;
         }
 
-        /* АНИМАЦИЯ: с побочной на главную */
         body.morphing.inner .logo-container {
             animation: moveRight 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
@@ -137,7 +161,7 @@
             100% {
                 left: 2rem;
                 transform: translateX(0);
-                max-width: 90px;  /* достаточно для буквы, без обрезания */
+                max-width: 90px;
             }
         }
 
@@ -155,21 +179,15 @@
         }
 
         @keyframes hideShort {
-            0% {
-                opacity: 1;
-            }
-            5% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 0;
-            }
+            0% { opacity: 1; }
+            5% { opacity: 0; }
+            100% { opacity: 0; }
         }
 
         @keyframes cropAndGrow {
             0% {
                 opacity: 0;
-                clip-path: inset(0 25% 0 0);  /* совсем чуть-чуть кропа, чтобы буква была целой */
+                clip-path: inset(0 25% 0 0);
             }
             5% {
                 opacity: 1;
@@ -181,6 +199,7 @@
             }
         }
 
+        /* КОНТЕНТ */
         .nav-links {
             display: flex;
             justify-content: center;
@@ -196,7 +215,8 @@
             border-radius: 60px;
             padding: 0.9rem 2.2rem;
             font-size: 1.2rem;
-            font-weight: 500;
+            font-weight: bold;
+            font-family: 'Ubuntu', sans-serif;
             letter-spacing: 0.02em;
             box-shadow: 0 8px 0 #2a2c3b, 0 10px 20px rgba(0,0,0,0.3);
             cursor: pointer;
@@ -225,27 +245,74 @@
             align-self: center;
             margin-top: 2rem;
             backdrop-filter: blur(2px);
+            font-family: 'Ubuntu', sans-serif;
+            font-weight: normal;
         }
 
-        .inner .content-box {
+        /* контент для главной */
+        .home-content {
+            text-align: center;
+            margin-top: 45vh;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .home-content h1 {
+            font-family: 'Onder', cursive;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+            text-shadow: 0 4px 0 #2a2c3b;
+            letter-spacing: 0.02em;
+        }
+
+        .home-content p {
+            font-family: 'Ubuntu', sans-serif;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #b9bff2;
+            margin-bottom: 2rem;
+        }
+
+        /* контент для внутренней */
+        .inner-content {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 30vh;
+            text-align: left;
+        }
+
+        .inner-content h2 {
+            font-family: 'Onder', cursive;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: #ffffff;
+            text-shadow: 0 4px 0 #2a2c3b;
+        }
+
+        .inner-content .card {
             background: #3d405b;
             padding: 2rem;
-            border-radius: 3rem;
-            color: #eaeefc;
-            width: 100%;
-            max-width: 500px;
-            align-self: center;
-            margin-top: 12vh;
+            border-radius: 2rem;
             border: 2px solid #5f6382;
             box-shadow: 0 15px 0 #2a2c3b;
         }
 
-        .logo-short {
-            content: url('svgs/logoshort.svg');
+        .inner-content .card p {
+            font-family: 'Ubuntu', sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #eaeefc;
+            margin-bottom: 1rem;
         }
 
-        .logo-full {
-            content: url('svgs/logofull.svg');
+        .inner-content .card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .inner-content .card strong {
+            font-weight: bold;
+            color: #ffffff;
         }
 
         img {
@@ -261,7 +328,10 @@
             .inner .logo-container {
                 top: 15vh;
             }
-            .nav-links {
+            .home-content {
+                margin-top: 40vh;
+            }
+            .inner-content {
                 margin-top: 25vh;
             }
         }
@@ -278,19 +348,25 @@
             </a>
         </div>
 
-        <div class="nav-links">
+        <!-- контент для главной страницы -->
+        <div class="home-content" id="homeContent">
+            <h1>Onder</h1>
+            <p>Этот заголовок использует шрифт Onder. Здесь мог быть ваш текст, но пока просто демонстрация того, как красиво можно оформить страницу с плавным переходом логотипа.</p>
             <button class="btn" id="toInnerBtn">→ на внутреннюю</button>
         </div>
 
-        <div class="page-indicator" id="pageLabel">главная · широкий логотип</div>
-
-        <div id="innerPageContent" style="width: 100%; display: none; justify-content: center;">
-            <div class="content-box">
-                ✦ внутренняя страница ✦<br>
-                одинаковая высота 15vh от верха<br>
-                <span style="color: #b9adff;">кроп 25% — буква целая</span>
+        <!-- контент для внутренней страницы (изначально скрыт) -->
+        <div class="inner-content" id="innerContent" style="display: none;">
+            <h2>Внутренняя</h2>
+            <div class="card">
+                <p><strong>Ubuntu Bold</strong> — для важных акцентов</p>
+                <p>А это обычный текст шрифтом Ubuntu Regular. Логотип слева теперь работает как кнопка возврата на главную. Нажми на него, чтобы вернуться обратно, и увидишь, как текст плавно появляется справа.</p>
+                <p>Кроп 25% идеально сохраняет букву целой, а логотип теперь точно доезжает до центра.</p>
             </div>
         </div>
+
+        <!-- индикатор (опционально, для ясности) -->
+        <div class="page-indicator" id="pageLabel">главная · широкий логотип</div>
     </div>
 
     <script>
@@ -299,7 +375,8 @@
             const toInnerBtn = document.getElementById('toInnerBtn');
             const logoBtn = document.getElementById('logoButton');
             const pageLabel = document.getElementById('pageLabel');
-            const innerContent = document.getElementById('innerPageContent');
+            const homeContent = document.getElementById('homeContent');
+            const innerContent = document.getElementById('innerContent');
             const logoContainer = document.querySelector('.logo-container');
             
             let isAnimating = false;
@@ -320,13 +397,15 @@
                     if (targetPage === 'inner') {
                         body.classList.remove('home');
                         body.classList.add('inner');
-                        pageLabel.innerText = 'внутренняя · короткий логотип';
-                        innerContent.style.display = 'flex';
+                        pageLabel.innerText = 'внутренняя · короткий логотип (кликни по нему)';
+                        homeContent.style.display = 'none';
+                        innerContent.style.display = 'block';
                         logoContainer.style.maxWidth = '';
                     } else {
                         body.classList.remove('inner');
                         body.classList.add('home');
                         pageLabel.innerText = 'главная · широкий логотип';
+                        homeContent.style.display = 'block';
                         innerContent.style.display = 'none';
                         logoContainer.style.maxWidth = '';
                     }
