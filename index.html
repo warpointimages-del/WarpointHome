@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Logo morph · clean no borders</title>
+    <title>Logo morph · equal height</title>
     <style>
         * {
             margin: 0;
@@ -27,7 +27,19 @@
             position: relative;
         }
 
-        /* ----- HOME (широкий логотип сверху по центру) ----- */
+        /* фиксированная высота для обоих логотипов */
+        .logo-full, .logo-short {
+            height: 8vh;           /* одинаковые базовые размеры */
+            min-height: 44px;
+            width: auto;           /* ширина автоматически подстраивается под пропорции */
+            display: none;
+            object-fit: contain;
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+
+        /* HOME: широкий логотип */
         .home .logo-container {
             position: absolute;
             left: 50%;
@@ -42,13 +54,12 @@
 
         .home .logo-full {
             display: block;
-            width: auto;
+            height: 8vh;
+            min-height: 44px;
             max-width: 70vw;
-            max-height: 12vh;
-            object-fit: contain;
         }
 
-        /* ----- INNER (короткий логотип слева сверху) ----- */
+        /* INNER: короткий логотип */
         .inner .logo-container {
             position: absolute;
             left: 2rem;
@@ -63,15 +74,12 @@
 
         .inner .logo-short {
             display: block;
-            width: auto;
             height: 8vh;
             min-height: 44px;
             max-width: 40vw;
-            object-fit: contain;
             cursor: pointer;
         }
 
-        /* общие стили */
         .logo-container {
             transition: all 0.45s cubic-bezier(0.65, 0, 0.35, 1);
             z-index: 10;
@@ -91,18 +99,12 @@
             width: fit-content;
         }
 
-        .logo-short,
-        .logo-full {
-            display: none;
-        }
-
-        /* ----- АНИМАЦИЯ ПЕРЕХОДА ----- */
+        /* ----- АНИМАЦИЯ ----- */
         body.morphing .logo-full,
         body.morphing .logo-short {
             display: block;
         }
 
-        /* home → inner */
         body.morphing.home .logo-container {
             animation: flyToCorner 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
@@ -115,7 +117,6 @@
             animation: appearShort 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
-        /* inner → home */
         body.morphing.inner .logo-container {
             animation: flyToCenter 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
@@ -198,7 +199,6 @@
             }
         }
 
-        /* навигация */
         .nav-links {
             display: flex;
             justify-content: center;
@@ -266,7 +266,6 @@
             content: url('svgs/logofull.svg');
         }
 
-        /* никаких обводок, бордеров, пунктиров — вообще ничего */
         img {
             background: transparent;
             border: none;
@@ -307,7 +306,7 @@
             <div class="content-box">
                 ✦ внутренняя страница ✦<br>
                 логотип слева — кнопка назад на главную<br>
-                <span style="color: #b9adff;">нажми на короткий логотип</span>
+                <span style="color: #b9adff;">высота логотипов одинаковая</span>
             </div>
         </div>
     </div>
@@ -360,11 +359,9 @@
                 }
             });
 
-            // вообще убираем любые возможные бордеры у сломавшихся картинок
             document.querySelectorAll('.logo-full, .logo-short').forEach(img => {
                 img.onerror = function() {
-                    // ничего не делаем, просто игнорим
-                    // абсолютно никаких обводок
+                    // ничего не делаем
                 };
             });
 
