@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Logo morph · идеальный кроп</title>
+    <title>Logo morph · идеальная высота + кроп</title>
     <style>
         * {
             margin: 0;
@@ -29,8 +29,8 @@
 
         /* общие стили для логотипов - одинаковая высота */
         .logo-full, .logo-short {
-            height: 8vh;
-            min-height: 44px;
+            height: 12vh;  /* как на побочной странице */
+            min-height: 52px;
             width: auto;
             object-fit: contain;
             background: transparent;
@@ -38,7 +38,7 @@
             outline: none;
         }
 
-        /* HOME: широкий логотип (буква + текст) */
+        /* HOME: широкий логотип */
         .home .logo-container {
             position: absolute;
             left: 50%;
@@ -56,11 +56,11 @@
             display: block;
         }
 
-        /* INNER: короткий логотип (только буква) */
+        /* INNER: короткий логотип - та же высота */
         .inner .logo-container {
             position: absolute;
             left: 2rem;
-            top: 1.5rem;
+            top: 15vh;  /* такая же вертикальная позиция */
             transform: none;
             width: fit-content;
             overflow: hidden;
@@ -73,12 +73,13 @@
         .inner .logo-short {
             display: block;
             cursor: pointer;
+            height: 12vh;
+            min-height: 52px;
         }
 
         .logo-container {
-            transition: left 0.7s cubic-bezier(0.65, 0, 0.35, 1), 
-                        top 0.7s cubic-bezier(0.65, 0, 0.35, 1), 
-                        transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+            transition: left 0.7s cubic-bezier(0.65, 0, 0.35, 1);
+            /* убираем transition для top - она фиксирована */
             z-index: 10;
         }
 
@@ -98,7 +99,7 @@
 
         /* АНИМАЦИЯ: с главной на побочную */
         body.morphing.home .logo-container {
-            animation: moveAndClip 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            animation: moveLeftOnly 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
         body.morphing.home .logo-full {
@@ -114,7 +115,7 @@
 
         /* АНИМАЦИЯ: с побочной на главную */
         body.morphing.inner .logo-container {
-            animation: moveAndExpand 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            animation: moveRightOnly 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
         body.morphing.inner .logo-short {
@@ -128,31 +129,27 @@
             animation: cropAndGrow 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
-        @keyframes moveAndClip {
+        @keyframes moveLeftOnly {
             0% {
                 left: 50%;
-                top: 15vh;
                 transform: translateX(-50%);
                 max-width: 100vw;
             }
             100% {
                 left: 2rem;
-                top: 1.5rem;
                 transform: translateX(0);
-                max-width: 80px;  /* ровно под размер буквы */
+                max-width: 85px;  /* чуть больше, чтобы не обрезать букву */
             }
         }
 
-        @keyframes moveAndExpand {
+        @keyframes moveRightOnly {
             0% {
                 left: 2rem;
-                top: 1.5rem;
                 transform: translateX(0);
-                max-width: 80px;
+                max-width: 85px;
             }
             100% {
                 left: 50%;
-                top: 15vh;
                 transform: translateX(-50%);
                 max-width: 100vw;
             }
@@ -173,11 +170,11 @@
         @keyframes cropAndGrow {
             0% {
                 opacity: 0;
-                clip-path: inset(0 45% 0 0);  /* средний кроп между жестким и мягким */
+                clip-path: inset(0 40% 0 0);  /* чуть меньше, чтобы не обрезать букву */
             }
             5% {
                 opacity: 1;
-                clip-path: inset(0 45% 0 0);
+                clip-path: inset(0 40% 0 0);
             }
             100% {
                 opacity: 1;
@@ -260,14 +257,13 @@
 
         @media (orientation: landscape) {
             .home .logo-container {
-                top: 8vh;
+                top: 12vh;
             }
             .inner .logo-container {
-                left: 2rem;
-                top: 1.5rem;
+                top: 12vh;
             }
             .nav-links {
-                margin-top: 25vh;
+                margin-top: 30vh;
             }
         }
     </style>
@@ -292,8 +288,8 @@
         <div id="innerPageContent" style="width: 100%; display: none; justify-content: center;">
             <div class="content-box">
                 ✦ внутренняя страница ✦<br>
-                короткий пропадает мгновенно<br>
-                <span style="color: #b9adff;">кроп 45% — золотая середина</span>
+                одинаковая высота, кроп 40%<br>
+                <span style="color: #b9adff;">буква не обрезана</span>
             </div>
         </div>
     </div>
@@ -353,15 +349,15 @@
                 img.onerror = function() {
                     if (this.classList.contains('logo-short')) {
                         this.style.backgroundColor = '#8a6de9';
-                        this.style.width = '60px';
-                        this.style.height = '44px';
+                        this.style.width = '65px';
+                        this.style.height = '52px';
                         this.style.borderRadius = '8px';
                     } else {
                         this.style.backgroundColor = '#8a6de9';
                         this.style.width = '180px';
-                        this.style.height = '44px';
+                        this.style.height = '52px';
                         this.style.borderRadius = '8px';
-                        this.style.background = 'linear-gradient(90deg, #8a6de9 80px, #b09aff 80px)';
+                        this.style.background = 'linear-gradient(90deg, #8a6de9 85px, #b09aff 85px)';
                     }
                 };
             });
