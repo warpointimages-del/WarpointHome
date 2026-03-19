@@ -19,16 +19,10 @@
 
         <!-- Карточки-навигации на главной -->
         <div class="home-content" id="homeContent">
-            <a href="combo.html" class="nav-card">Комбо</a>
-            <a href="birthdays.html" class="nav-card">Дни рождения</a>
-            <a href="corporate.html" class="nav-card">Корпоративы</a>
-            <a href="registration.html" class="nav-card">Регистрация</a>
-        </div>
-
-        <!-- контент для внутренней страницы (скрыт на главной) -->
-        <div class="inner-content" id="innerContent" style="display: none;">
-            <h2>Внутренняя</h2>
-            <!-- здесь будет контент внутренних страниц -->
+            <a href="combo.html" class="nav-card" onclick="return animateToInner('combo.html')">Комбо</a>
+            <a href="birthdays.html" class="nav-card" onclick="return animateToInner('birthdays.html')">Дни рождения</a>
+            <a href="corporate.html" class="nav-card" onclick="return animateToInner('corporate.html')">Корпоративы</a>
+            <a href="registration.html" class="nav-card" onclick="return animateToInner('registration.html')">Регистрация</a>
         </div>
 
         <!-- индикатор -->
@@ -38,95 +32,28 @@
     <script>
         (function() {
             const body = document.getElementById('main-page');
-            const logoBtn = document.getElementById('logoButton');
             const pageLabel = document.getElementById('pageLabel');
-            const homeContent = document.getElementById('homeContent');
-            const innerContent = document.getElementById('innerContent');
-            const logoContainer = document.querySelector('.logo-container');
             
-            let isAnimating = false;
-
-            // Функция навигации (для логотипа и кнопок)
-            function navigateTo(targetPage) {
-                if (isAnimating) return;
-                
-                const currentIsHome = body.classList.contains('home');
-                
-                if ((targetPage === 'home' && currentIsHome) || (targetPage === 'inner' && !currentIsHome)) {
-                    return;
-                }
-
-                isAnimating = true;
+            // Функция анимированного перехода на внутреннюю страницу
+            window.animateToInner = function(targetUrl) {
+                // Запускаем анимацию
                 body.classList.add('morphing');
-
+                
+                // Ждём окончания анимации и переходим
                 setTimeout(() => {
-                    if (targetPage === 'inner') {
-                        body.classList.remove('home');
-                        body.classList.add('inner');
-                        pageLabel.innerText = 'внутренняя · короткий логотип (кликни по нему)';
-                        homeContent.style.display = 'none';
-                        innerContent.style.display = 'block';
-                        logoContainer.style.maxWidth = '';
-                    } else {
-                        body.classList.remove('inner');
-                        body.classList.add('home');
-                        pageLabel.innerText = 'главная · широкий логотип';
-                        homeContent.style.display = 'flex'; // меняем обратно на flex, так как на главной grid
-                        innerContent.style.display = 'none';
-                        logoContainer.style.maxWidth = '';
-                    }
-                    
-                    body.classList.remove('morphing');
-                    isAnimating = false;
+                    window.location.href = targetUrl;
                 }, 800);
-            }
+                
+                return false; // отменяем стандартный переход
+            };
 
-            // Логотип работает как кнопка "на главную" только на внутренних страницах
-            logoBtn.addEventListener('click', (e) => {
-                // Для внутренних страниц (не index.html) ссылка на index.html сработает сама
-                // Этот обработчик в основном для анимации, но мы его оставим для плавности
-                if (body.classList.contains('inner')) {
-                    e.preventDefault(); // предотвращаем прямой переход, делаем с анимацией
-                    navigateTo('home');
-                }
-                // Если мы на главной, ссылка на index.html просто перезагрузит страницу - это ок
+            // Обработчик для логотипа (если вдруг кликнут на главной - ничего не делаем)
+            document.getElementById('logoButton').addEventListener('click', (e) => {
+                e.preventDefault(); // просто отменяем переход
             });
 
-            // Эмуляция перехода при загрузке страницы (для демо)
-            // Проверяем, не внутренняя ли это страница (по URL)
-            const path = window.location.pathname;
-            if (path.includes('combo.html') || path.includes('birthdays.html') || 
-                path.includes('corporate.html') || path.includes('registration.html')) {
-                // Если мы на одной из новых страниц, применяем класс inner
-                body.classList.remove('home');
-                body.classList.add('inner');
-                pageLabel.innerText = 'внутренняя · короткий логотип (кликни по лого)';
-                homeContent.style.display = 'none';
-                innerContent.style.display = 'block';
-                // Меняем заголовок h2 на название страницы
-                const pageTitle = document.querySelector('.inner-content h2');
-                if (path.includes('combo')) pageTitle.innerText = 'Комбо';
-                if (path.includes('birthdays')) pageTitle.innerText = 'Дни рождения';
-                if (path.includes('corporate')) pageTitle.innerText = 'Корпоративы';
-                if (path.includes('registration')) pageTitle.innerText = 'Регистрация';
-            }
-
-            // Стили для курсора
-            const style = document.createElement('style');
-            style.textContent = `
-                .inner .logo-link {
-                    cursor: pointer;
-                }
-                .home .logo-link {
-                    cursor: default;
-                }
-                img {
-                    border: none !important;
-                    outline: none !important;
-                    box-shadow: none !important;
-                }
-            `;
-            document.head.appendChild(style);
+            // Эмуляция при загрузке - проверяем, не с внутренней ли мы страницы вернулись
+            // (для красоты можно добавить анимацию прихода)
         })();
     </script>
 </body>
