@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>WARPOINT · Корпоративы</title>
+    <title>WARPOINT · Дни рождения</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="inner" id="main-page">
@@ -19,10 +19,29 @@
 
         <div class="inner-content">
             <h2>Корпоративы</h2>
-            <!-- Здесь будет контент страницы Корпоративы -->
         </div>
 
-        <div class="page-indicator">корпоративы · короткий логотип</div>
+        <div class="page-indicator">Станколит</div>
     </div>
+
+    <script>
+        (function() {
+            const body = document.getElementById('main-page');
+            const logoBtn = document.getElementById('logoButton');
+            
+            window.animateToHome = function(targetUrl) {
+                body.classList.add('morphing');
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 800);
+                return false;
+            };
+
+            logoBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                animateToHome('index.html');
+            });
+        })();
+    </script>
 </body>
 </html>
