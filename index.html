@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Logo morph · perfect flyaway</title>
+    <title>Logo morph · clean no borders</title>
     <style>
         * {
             margin: 0;
@@ -23,7 +23,7 @@
             padding: 1.5rem 2rem 2rem 2rem;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
             position: relative;
         }
 
@@ -46,7 +46,6 @@
             max-width: 70vw;
             max-height: 12vh;
             object-fit: contain;
-            background: transparent;
         }
 
         /* ----- INNER (короткий логотип слева сверху) ----- */
@@ -69,7 +68,6 @@
             min-height: 44px;
             max-width: 40vw;
             object-fit: contain;
-            background: transparent;
             cursor: pointer;
         }
 
@@ -93,20 +91,18 @@
             width: fit-content;
         }
 
-        /* оба логотипа с прозрачным фоном */
         .logo-short,
         .logo-full {
             display: none;
-            background: transparent !important;
         }
 
-        /* ----- АНИМАЦИЯ ПЕРЕХОДА home → inner ----- */
+        /* ----- АНИМАЦИЯ ПЕРЕХОДА ----- */
         body.morphing .logo-full,
         body.morphing .logo-short {
             display: block;
         }
 
-        /* летим из центра в левый верхний угол */
+        /* home → inner */
         body.morphing.home .logo-container {
             animation: flyToCorner 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
@@ -119,7 +115,7 @@
             animation: appearShort 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
-        /* летим из угла в центр (inner → home) */
+        /* inner → home */
         body.morphing.inner .logo-container {
             animation: flyToCenter 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
@@ -202,14 +198,12 @@
             }
         }
 
-        /* навигация - только кнопка на главную (на главной) */
+        /* навигация */
         .nav-links {
             display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            margin-top: 2.5rem;
-            align-self: center;
-            position: relative;
+            justify-content: center;
+            width: 100%;
+            margin-top: 35vh;
             z-index: 5;
         }
 
@@ -222,9 +216,6 @@
             font-size: 1.2rem;
             font-weight: 500;
             letter-spacing: 0.02em;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
             box-shadow: 0 8px 0 #2a2c3b, 0 10px 20px rgba(0,0,0,0.3);
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
@@ -237,7 +228,6 @@
             box-shadow: 0 2px 0 #2a2c3b, 0 5px 12px rgba(0,0,0,0.3);
         }
 
-        /* на внутренней странице кнопка скрыта */
         .inner .nav-links {
             display: none;
         }
@@ -255,7 +245,6 @@
             backdrop-filter: blur(2px);
         }
 
-        /* контент для внутренней страницы */
         .inner .content-box {
             background: #3d405b;
             padding: 2rem;
@@ -264,12 +253,11 @@
             width: 100%;
             max-width: 500px;
             align-self: center;
-            margin-top: 2rem;
+            margin-top: 12vh;
             border: 2px solid #5f6382;
             box-shadow: 0 15px 0 #2a2c3b;
         }
 
-        /* плейсхолдеры для svg из репозитория - без фона */
         .logo-short {
             content: url('svgs/logoshort.svg');
         }
@@ -278,13 +266,11 @@
             content: url('svgs/logofull.svg');
         }
 
-        /* фолбек если svg не загрузились - но фон прозрачный */
-        .logo-short[src="svgs/logoshort.svg"],
-        .logo-full[src="svgs/logofull.svg"] {
-            background: transparent !important;
-            min-width: 60px;
-            min-height: 60px;
-            border: 1px dashed #8a6de9; /* пунктир чтобы было видно границы при отсутствии файлов */
+        /* никаких обводок, бордеров, пунктиров — вообще ничего */
+        img {
+            background: transparent;
+            border: none;
+            outline: none;
         }
 
         @media (orientation: landscape) {
@@ -294,17 +280,14 @@
             .inner .logo-short {
                 height: 12vh;
             }
-        }
-
-        /* отключаем фон у изображений */
-        img {
-            background: transparent;
+            .nav-links {
+                margin-top: 25vh;
+            }
         }
     </style>
 </head>
 <body class="home" id="main-page">
     <div class="app">
-        <!-- контейнер с логотипом (ОН ЖЕ КНОПКА НАЗАД НА INNER) -->
         <div class="logo-container">
             <a href="#" class="logo-link" id="logoButton" onclick="return false;">
                 <div class="logo-svg-wrapper">
@@ -314,15 +297,12 @@
             </a>
         </div>
 
-        <!-- кнопка навигации (только на главной) -->
         <div class="nav-links">
             <button class="btn" id="toInnerBtn">→ на внутреннюю</button>
         </div>
 
-        <!-- индикатор страницы (опционально, для ясности) -->
         <div class="page-indicator" id="pageLabel">главная · широкий логотип</div>
 
-        <!-- контент для внутренней страницы -->
         <div id="innerPageContent" style="width: 100%; display: none; justify-content: center;">
             <div class="content-box">
                 ✦ внутренняя страница ✦<br>
@@ -372,31 +352,22 @@
                 }, 450);
             }
 
-            // кнопка "на внутреннюю"
             toInnerBtn.addEventListener('click', () => navigateTo('inner'));
 
-            // логотип как кнопка "на главную" (работает только на inner странице)
             logoBtn.addEventListener('click', () => {
-                // срабатывает только если мы на inner
                 if (body.classList.contains('inner')) {
                     navigateTo('home');
                 }
-                // на главной логотип не кликабельный для навигации (но можно оставить как есть)
             });
 
-            // фолбек для svg - без фона, просто контур
+            // вообще убираем любые возможные бордеры у сломавшихся картинок
             document.querySelectorAll('.logo-full, .logo-short').forEach(img => {
                 img.onerror = function() {
-                    this.style.backgroundColor = 'transparent';
-                    this.style.minWidth = '100px';
-                    this.style.minHeight = '60px';
-                    this.style.border = '2px dashed #8a6de9';
-                    this.style.borderRadius = '0';
+                    // ничего не делаем, просто игнорим
+                    // абсолютно никаких обводок
                 };
             });
 
-            // маленькая хитрость: на home логотип не кликабельный (но можно оставить, ничего не сломает)
-            // добавим стиль для курсора
             const style = document.createElement('style');
             style.textContent = `
                 .inner .logo-link {
@@ -404,6 +375,11 @@
                 }
                 .home .logo-link {
                     cursor: default;
+                }
+                img {
+                    border: none !important;
+                    outline: none !important;
+                    box-shadow: none !important;
                 }
             `;
             document.head.appendChild(style);
