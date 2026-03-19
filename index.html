@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Logo morph · плавный мягкий кроп</title>
+    <title>Logo morph · идеальный кроп</title>
     <style>
         * {
             margin: 0;
@@ -76,9 +76,9 @@
         }
 
         .logo-container {
-            transition: left 0.8s cubic-bezier(0.65, 0, 0.35, 1), 
-                        top 0.8s cubic-bezier(0.65, 0, 0.35, 1), 
-                        transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+            transition: left 0.7s cubic-bezier(0.65, 0, 0.35, 1), 
+                        top 0.7s cubic-bezier(0.65, 0, 0.35, 1), 
+                        transform 0.7s cubic-bezier(0.65, 0, 0.35, 1);
             z-index: 10;
         }
 
@@ -96,9 +96,9 @@
             width: fit-content;
         }
 
-        /* АНИМАЦИЯ: с главной на побочную - обрезаем широкий логотип справа (меньше кроп) */
+        /* АНИМАЦИЯ: с главной на побочную */
         body.morphing.home .logo-container {
-            animation: moveAndSoftClip 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            animation: moveAndClip 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
         body.morphing.home .logo-full {
@@ -114,21 +114,21 @@
 
         /* АНИМАЦИЯ: с побочной на главную */
         body.morphing.inner .logo-container {
-            animation: moveAndSoftExpand 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            animation: moveAndExpand 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
         body.morphing.inner .logo-short {
             display: block;
-            animation: fadeOutShort 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            animation: hideShort 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
         body.morphing.inner .logo-full {
             display: block;
             transform-origin: left center;
-            animation: softCropAndGrow 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            animation: cropAndGrow 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
-        @keyframes moveAndSoftClip {
+        @keyframes moveAndClip {
             0% {
                 left: 50%;
                 top: 15vh;
@@ -139,16 +139,16 @@
                 left: 2rem;
                 top: 1.5rem;
                 transform: translateX(0);
-                max-width: 120px;  /* достаточно для буквы + чуть пространства */
+                max-width: 80px;  /* ровно под размер буквы */
             }
         }
 
-        @keyframes moveAndSoftExpand {
+        @keyframes moveAndExpand {
             0% {
                 left: 2rem;
                 top: 1.5rem;
                 transform: translateX(0);
-                max-width: 120px;
+                max-width: 80px;
             }
             100% {
                 left: 50%;
@@ -158,26 +158,26 @@
             }
         }
 
-        @keyframes fadeOutShort {
+        @keyframes hideShort {
             0% {
                 opacity: 1;
             }
-            30% {
-                opacity: 0.7;
+            5% {
+                opacity: 0;
             }
             100% {
                 opacity: 0;
             }
         }
 
-        @keyframes softCropAndGrow {
+        @keyframes cropAndGrow {
             0% {
                 opacity: 0;
-                clip-path: inset(0 30% 0 0);  /* мягкий кроп, видна буква */
+                clip-path: inset(0 45% 0 0);  /* средний кроп между жестким и мягким */
             }
-            20% {
+            5% {
                 opacity: 1;
-                clip-path: inset(0 30% 0 0);
+                clip-path: inset(0 45% 0 0);
             }
             100% {
                 opacity: 1;
@@ -292,8 +292,8 @@
         <div id="innerPageContent" style="width: 100%; display: none; justify-content: center;">
             <div class="content-box">
                 ✦ внутренняя страница ✦<br>
-                очень плавно, мягкий кроп<br>
-                <span style="color: #b9adff;">буква всегда видна</span>
+                короткий пропадает мгновенно<br>
+                <span style="color: #b9adff;">кроп 45% — золотая середина</span>
             </div>
         </div>
     </div>
@@ -338,7 +338,7 @@
                     
                     body.classList.remove('morphing');
                     isAnimating = false;
-                }, 800);
+                }, 700);
             }
 
             toInnerBtn.addEventListener('click', () => navigateTo('inner'));
@@ -358,10 +358,10 @@
                         this.style.borderRadius = '8px';
                     } else {
                         this.style.backgroundColor = '#8a6de9';
-                        this.style.width = '160px';
+                        this.style.width = '180px';
                         this.style.height = '44px';
                         this.style.borderRadius = '8px';
-                        this.style.background = 'linear-gradient(90deg, #8a6de9 70px, #b09aff 70px)';
+                        this.style.background = 'linear-gradient(90deg, #8a6de9 80px, #b09aff 80px)';
                     }
                 };
             });
