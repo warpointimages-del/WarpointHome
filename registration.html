@@ -19,10 +19,29 @@
 
         <div class="inner-content">
             <h2>Регистрация</h2>
-            <!-- Здесь будет контент страницы Регистрация -->
         </div>
 
-        <div class="page-indicator">регистрация · короткий логотип</div>
+        <div class="page-indicator">Станколит</div>
     </div>
+
+    <script>
+        (function() {
+            const body = document.getElementById('main-page');
+            const logoBtn = document.getElementById('logoButton');
+            
+            window.animateToHome = function(targetUrl) {
+                body.classList.add('morphing');
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 800);
+                return false;
+            };
+
+            logoBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                animateToHome('index.html');
+            });
+        })();
+    </script>
 </body>
 </html>
