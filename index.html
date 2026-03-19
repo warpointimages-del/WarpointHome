@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Logo morph · clean swap</title>
+    <title>Logo morph · perfect flyaway</title>
     <style>
         * {
             margin: 0;
@@ -15,7 +15,6 @@
             background-color: #323549;
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             min-height: 100vh;
-            transition: background-color 0.2s;
         }
 
         .app {
@@ -30,10 +29,11 @@
 
         /* ----- HOME (широкий логотип сверху по центру) ----- */
         .home .logo-container {
-            align-self: center;
+            position: absolute;
+            left: 50%;
+            top: 15vh;
+            transform: translateX(-50%);
             width: fit-content;
-            max-width: 90vw;
-            margin-top: 15vh;
         }
 
         .home .logo-short {
@@ -46,12 +46,16 @@
             max-width: 70vw;
             max-height: 12vh;
             object-fit: contain;
+            background: transparent;
         }
 
         /* ----- INNER (короткий логотип слева сверху) ----- */
         .inner .logo-container {
-            align-self: flex-start;
-            margin-top: 0;
+            position: absolute;
+            left: 2rem;
+            top: 1.5rem;
+            transform: none;
+            width: fit-content;
         }
 
         .inner .logo-full {
@@ -65,17 +69,21 @@
             min-height: 44px;
             max-width: 40vw;
             object-fit: contain;
+            background: transparent;
+            cursor: pointer;
         }
 
-        /* общий контейнер для логотипа */
+        /* общие стили */
         .logo-container {
-            transition: all 0.3s ease;
+            transition: all 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+            z-index: 10;
         }
 
         .logo-link {
             display: inline-block;
             text-decoration: none;
             -webkit-tap-highlight-color: transparent;
+            cursor: pointer;
         }
 
         .logo-svg-wrapper {
@@ -85,109 +93,124 @@
             width: fit-content;
         }
 
-        /* оба логотипа по умолчанию скрыты, показываем через классы body */
+        /* оба логотипа с прозрачным фоном */
         .logo-short,
         .logo-full {
             display: none;
-            transition: opacity 0.3s ease;
+            background: transparent !important;
         }
 
-        /* ----- АНИМАЦИЯ ПЕРЕХОДА ----- */
-        /* во время анимации показываем оба лого, чтобы создать эффект трансформации */
+        /* ----- АНИМАЦИЯ ПЕРЕХОДА home → inner ----- */
         body.morphing .logo-full,
         body.morphing .logo-short {
             display: block;
         }
 
-        /* стартовое состояние для home → inner */
+        /* летим из центра в левый верхний угол */
+        body.morphing.home .logo-container {
+            animation: flyToCorner 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+        }
+
         body.morphing.home .logo-full {
-            animation: shrinkToLeft 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-            transform-origin: left center;
-            position: relative;
-            z-index: 2;
+            animation: fadeFull 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
         body.morphing.home .logo-short {
-            animation: slideShort 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-            transform-origin: left center;
-            position: relative;
-            left: 0;
-            z-index: 1;
+            animation: appearShort 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
-        /* стартовое состояние для inner → home */
+        /* летим из угла в центр (inner → home) */
+        body.morphing.inner .logo-container {
+            animation: flyToCenter 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+        }
+
         body.morphing.inner .logo-short {
-            animation: hideShort 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-            transform-origin: left center;
+            animation: fadeShort 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
         body.morphing.inner .logo-full {
-            animation: growFromLeft 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
-            transform-origin: left center;
+            animation: appearFull 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
-        @keyframes shrinkToLeft {
+        @keyframes flyToCorner {
+            0% {
+                left: 50%;
+                top: 15vh;
+                transform: translateX(-50%);
+            }
+            100% {
+                left: 2rem;
+                top: 1.5rem;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes flyToCenter {
+            0% {
+                left: 2rem;
+                top: 1.5rem;
+                transform: translateX(0);
+            }
+            100% {
+                left: 50%;
+                top: 15vh;
+                transform: translateX(-50%);
+            }
+        }
+
+        @keyframes fadeFull {
             0% {
                 opacity: 1;
-                transform: scaleX(1) translateX(0);
-                width: auto;
+                transform: scaleX(1);
             }
             100% {
                 opacity: 0;
-                transform: scaleX(0.2) translateX(-25%);
-                width: 0;
+                transform: scaleX(0.2);
             }
         }
 
-        @keyframes slideShort {
+        @keyframes appearShort {
             0% {
                 opacity: 0;
-                transform: scaleX(0.2) translateX(-30%);
-                width: 0;
-            }
-            50% {
-                opacity: 0.3;
+                transform: scaleX(0.2);
             }
             100% {
                 opacity: 1;
-                transform: scaleX(1) translateX(0);
-                width: auto;
+                transform: scaleX(1);
             }
         }
 
-        @keyframes hideShort {
+        @keyframes fadeShort {
             0% {
                 opacity: 1;
-                transform: scaleX(1) translateX(0);
-                width: auto;
+                transform: scaleX(1);
             }
             100% {
                 opacity: 0;
-                transform: scaleX(0.2) translateX(-25%);
-                width: 0;
+                transform: scaleX(0.2);
             }
         }
 
-        @keyframes growFromLeft {
+        @keyframes appearFull {
             0% {
                 opacity: 0;
-                transform: scaleX(0.2) translateX(-25%);
-                width: 0;
+                transform: scaleX(0.2);
             }
             100% {
                 opacity: 1;
-                transform: scaleX(1) translateX(0);
-                width: auto;
+                transform: scaleX(1);
             }
         }
 
-        /* навигация */
+        /* навигация - только кнопка на главную (на главной) */
         .nav-links {
             display: flex;
             gap: 1.5rem;
             flex-wrap: wrap;
             margin-top: 2.5rem;
             align-self: center;
+            position: relative;
+            z-index: 5;
         }
 
         .btn {
@@ -212,6 +235,11 @@
         .btn:active {
             transform: translateY(6px);
             box-shadow: 0 2px 0 #2a2c3b, 0 5px 12px rgba(0,0,0,0.3);
+        }
+
+        /* на внутренней странице кнопка скрыта */
+        .inner .nav-links {
+            display: none;
         }
 
         .page-indicator {
@@ -241,7 +269,7 @@
             box-shadow: 0 15px 0 #2a2c3b;
         }
 
-        /* плейсхолдеры для svg из репозитория */
+        /* плейсхолдеры для svg из репозитория - без фона */
         .logo-short {
             content: url('svgs/logoshort.svg');
         }
@@ -250,30 +278,35 @@
             content: url('svgs/logofull.svg');
         }
 
-        /* фолбек если svg не загрузились */
+        /* фолбек если svg не загрузились - но фон прозрачный */
         .logo-short[src="svgs/logoshort.svg"],
         .logo-full[src="svgs/logofull.svg"] {
-            background: #8a6de9;
-            border-radius: 20px;
+            background: transparent !important;
             min-width: 60px;
             min-height: 60px;
+            border: 1px dashed #8a6de9; /* пунктир чтобы было видно границы при отсутствии файлов */
         }
 
         @media (orientation: landscape) {
             .home .logo-container {
-                margin-top: 8vh;
+                top: 8vh;
             }
             .inner .logo-short {
                 height: 12vh;
             }
         }
+
+        /* отключаем фон у изображений */
+        img {
+            background: transparent;
+        }
     </style>
 </head>
 <body class="home" id="main-page">
     <div class="app">
-        <!-- контейнер с логотипом -->
+        <!-- контейнер с логотипом (ОН ЖЕ КНОПКА НАЗАД НА INNER) -->
         <div class="logo-container">
-            <a href="#" class="logo-link" onclick="return false;" style="cursor: default;">
+            <a href="#" class="logo-link" id="logoButton" onclick="return false;">
                 <div class="logo-svg-wrapper">
                     <img class="logo-full" src="svgs/logofull.svg" alt="Full logo" draggable="false">
                     <img class="logo-short" src="svgs/logoshort.svg" alt="Short logo" draggable="false">
@@ -281,21 +314,20 @@
             </a>
         </div>
 
-        <!-- кнопки навигации -->
+        <!-- кнопка навигации (только на главной) -->
         <div class="nav-links">
             <button class="btn" id="toInnerBtn">→ на внутреннюю</button>
-            <button class="btn btn-secondary" id="toHomeBtn">← на главную</button>
         </div>
 
-        <!-- индикатор страницы -->
+        <!-- индикатор страницы (опционально, для ясности) -->
         <div class="page-indicator" id="pageLabel">главная · широкий логотип</div>
 
-        <!-- контент для внутренней страницы (изначально скрыт) -->
+        <!-- контент для внутренней страницы -->
         <div id="innerPageContent" style="width: 100%; display: none; justify-content: center;">
             <div class="content-box">
                 ✦ внутренняя страница ✦<br>
-                здесь только короткий логотип слева<br>
-                <span style="color: #b9adff;">landscape mode, портрет не используется</span>
+                логотип слева — кнопка назад на главную<br>
+                <span style="color: #b9adff;">нажми на короткий логотип</span>
             </div>
         </div>
     </div>
@@ -304,35 +336,29 @@
         (function() {
             const body = document.getElementById('main-page');
             const toInnerBtn = document.getElementById('toInnerBtn');
-            const toHomeBtn = document.getElementById('toHomeBtn');
+            const logoBtn = document.getElementById('logoButton');
             const pageLabel = document.getElementById('pageLabel');
             const innerContent = document.getElementById('innerPageContent');
             
-            // флаг для блокировки повторной анимации
             let isAnimating = false;
 
-            // функция смены страницы с анимацией
             function navigateTo(targetPage) {
                 if (isAnimating) return;
                 
                 const currentIsHome = body.classList.contains('home');
                 
-                // если уже на целевой странице — ничего не делаем
                 if ((targetPage === 'home' && currentIsHome) || (targetPage === 'inner' && !currentIsHome)) {
                     return;
                 }
 
                 isAnimating = true;
-
-                // добавляем класс morphing для запуска анимации
                 body.classList.add('morphing');
 
-                // через 450 мс (длительность анимации) меняем класс страницы и убираем morphing
                 setTimeout(() => {
                     if (targetPage === 'inner') {
                         body.classList.remove('home');
                         body.classList.add('inner');
-                        pageLabel.innerText = 'внутренняя · короткий логотип';
+                        pageLabel.innerText = 'внутренняя · короткий логотип (кликни по нему)';
                         innerContent.style.display = 'flex';
                     } else {
                         body.classList.remove('inner');
@@ -341,25 +367,46 @@
                         innerContent.style.display = 'none';
                     }
                     
-                    // убираем класс анимации
                     body.classList.remove('morphing');
                     isAnimating = false;
                 }, 450);
             }
 
-            // обработчики кнопок
+            // кнопка "на внутреннюю"
             toInnerBtn.addEventListener('click', () => navigateTo('inner'));
-            toHomeBtn.addEventListener('click', () => navigateTo('home'));
 
-            // фолбек для svg
+            // логотип как кнопка "на главную" (работает только на inner странице)
+            logoBtn.addEventListener('click', () => {
+                // срабатывает только если мы на inner
+                if (body.classList.contains('inner')) {
+                    navigateTo('home');
+                }
+                // на главной логотип не кликабельный для навигации (но можно оставить как есть)
+            });
+
+            // фолбек для svg - без фона, просто контур
             document.querySelectorAll('.logo-full, .logo-short').forEach(img => {
                 img.onerror = function() {
-                    this.style.backgroundColor = '#8a6de9';
+                    this.style.backgroundColor = 'transparent';
                     this.style.minWidth = '100px';
                     this.style.minHeight = '60px';
-                    this.style.borderRadius = '30px';
+                    this.style.border = '2px dashed #8a6de9';
+                    this.style.borderRadius = '0';
                 };
             });
+
+            // маленькая хитрость: на home логотип не кликабельный (но можно оставить, ничего не сломает)
+            // добавим стиль для курсора
+            const style = document.createElement('style');
+            style.textContent = `
+                .inner .logo-link {
+                    cursor: pointer;
+                }
+                .home .logo-link {
+                    cursor: default;
+                }
+            `;
+            document.head.appendChild(style);
         })();
     </script>
 </body>
