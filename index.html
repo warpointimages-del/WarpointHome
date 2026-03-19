@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Logo morph · идеальная высота + кроп</title>
+    <title>Logo morph · идеальный баланс</title>
     <style>
         * {
             margin: 0;
@@ -29,8 +29,8 @@
 
         /* общие стили для логотипов - одинаковая высота */
         .logo-full, .logo-short {
-            height: 12vh;  /* как на побочной странице */
-            min-height: 52px;
+            height: 8vh;
+            min-height: 44px;
             width: auto;
             object-fit: contain;
             background: transparent;
@@ -56,11 +56,11 @@
             display: block;
         }
 
-        /* INNER: короткий логотип - та же высота */
+        /* INNER: короткий логотип */
         .inner .logo-container {
             position: absolute;
             left: 2rem;
-            top: 15vh;  /* такая же вертикальная позиция */
+            top: 15vh;  /* та же вертикальная позиция, что и на главной */
             transform: none;
             width: fit-content;
             overflow: hidden;
@@ -73,13 +73,12 @@
         .inner .logo-short {
             display: block;
             cursor: pointer;
-            height: 12vh;
-            min-height: 52px;
+            height: 8vh;
+            min-height: 44px;
         }
 
         .logo-container {
-            transition: left 0.7s cubic-bezier(0.65, 0, 0.35, 1);
-            /* убираем transition для top - она фиксирована */
+            transition: left 0.8s cubic-bezier(0.65, 0, 0.35, 1);
             z-index: 10;
         }
 
@@ -99,7 +98,7 @@
 
         /* АНИМАЦИЯ: с главной на побочную */
         body.morphing.home .logo-container {
-            animation: moveLeftOnly 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            animation: moveLeft 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
         body.morphing.home .logo-full {
@@ -115,21 +114,21 @@
 
         /* АНИМАЦИЯ: с побочной на главную */
         body.morphing.inner .logo-container {
-            animation: moveRightOnly 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            animation: moveRight 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
         body.morphing.inner .logo-short {
             display: block;
-            animation: hideShort 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            animation: hideShort 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
         body.morphing.inner .logo-full {
             display: block;
             transform-origin: left center;
-            animation: cropAndGrow 0.7s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            animation: cropAndGrow 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
-        @keyframes moveLeftOnly {
+        @keyframes moveLeft {
             0% {
                 left: 50%;
                 transform: translateX(-50%);
@@ -138,15 +137,15 @@
             100% {
                 left: 2rem;
                 transform: translateX(0);
-                max-width: 85px;  /* чуть больше, чтобы не обрезать букву */
+                max-width: 90px;  /* достаточно для буквы, без обрезания */
             }
         }
 
-        @keyframes moveRightOnly {
+        @keyframes moveRight {
             0% {
                 left: 2rem;
                 transform: translateX(0);
-                max-width: 85px;
+                max-width: 90px;
             }
             100% {
                 left: 50%;
@@ -170,11 +169,11 @@
         @keyframes cropAndGrow {
             0% {
                 opacity: 0;
-                clip-path: inset(0 40% 0 0);  /* чуть меньше, чтобы не обрезать букву */
+                clip-path: inset(0 25% 0 0);  /* совсем чуть-чуть кропа, чтобы буква была целой */
             }
             5% {
                 opacity: 1;
-                clip-path: inset(0 40% 0 0);
+                clip-path: inset(0 25% 0 0);
             }
             100% {
                 opacity: 1;
@@ -257,13 +256,13 @@
 
         @media (orientation: landscape) {
             .home .logo-container {
-                top: 12vh;
+                top: 15vh;
             }
             .inner .logo-container {
-                top: 12vh;
+                top: 15vh;
             }
             .nav-links {
-                margin-top: 30vh;
+                margin-top: 25vh;
             }
         }
     </style>
@@ -288,8 +287,8 @@
         <div id="innerPageContent" style="width: 100%; display: none; justify-content: center;">
             <div class="content-box">
                 ✦ внутренняя страница ✦<br>
-                одинаковая высота, кроп 40%<br>
-                <span style="color: #b9adff;">буква не обрезана</span>
+                одинаковая высота 15vh от верха<br>
+                <span style="color: #b9adff;">кроп 25% — буква целая</span>
             </div>
         </div>
     </div>
@@ -334,7 +333,7 @@
                     
                     body.classList.remove('morphing');
                     isAnimating = false;
-                }, 700);
+                }, 800);
             }
 
             toInnerBtn.addEventListener('click', () => navigateTo('inner'));
@@ -349,15 +348,15 @@
                 img.onerror = function() {
                     if (this.classList.contains('logo-short')) {
                         this.style.backgroundColor = '#8a6de9';
-                        this.style.width = '65px';
-                        this.style.height = '52px';
+                        this.style.width = '70px';
+                        this.style.height = '44px';
                         this.style.borderRadius = '8px';
                     } else {
                         this.style.backgroundColor = '#8a6de9';
                         this.style.width = '180px';
-                        this.style.height = '52px';
+                        this.style.height = '44px';
                         this.style.borderRadius = '8px';
-                        this.style.background = 'linear-gradient(90deg, #8a6de9 85px, #b09aff 85px)';
+                        this.style.background = 'linear-gradient(90deg, #8a6de9 90px, #b09aff 90px)';
                     }
                 };
             });
