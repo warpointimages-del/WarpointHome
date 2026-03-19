@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Logo morph · perfect reverse crop</title>
+    <title>Logo morph · плавный мягкий кроп</title>
     <style>
         * {
             margin: 0;
@@ -76,9 +76,9 @@
         }
 
         .logo-container {
-            transition: left 0.6s cubic-bezier(0.65, 0, 0.35, 1), 
-                        top 0.6s cubic-bezier(0.65, 0, 0.35, 1), 
-                        transform 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+            transition: left 0.8s cubic-bezier(0.65, 0, 0.35, 1), 
+                        top 0.8s cubic-bezier(0.65, 0, 0.35, 1), 
+                        transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
             z-index: 10;
         }
 
@@ -96,9 +96,9 @@
             width: fit-content;
         }
 
-        /* АНИМАЦИЯ: с главной на побочную - обрезаем широкий логотип справа */
+        /* АНИМАЦИЯ: с главной на побочную - обрезаем широкий логотип справа (меньше кроп) */
         body.morphing.home .logo-container {
-            animation: moveAndClip 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            animation: moveAndSoftClip 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
         body.morphing.home .logo-full {
@@ -112,23 +112,23 @@
             display: none;
         }
 
-        /* АНИМАЦИЯ: с побочной на главную - короткий исчезает, широкий появляется уже с кропом и разблокируется */
+        /* АНИМАЦИЯ: с побочной на главную */
         body.morphing.inner .logo-container {
-            animation: moveAndExpand 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            animation: moveAndSoftExpand 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
         body.morphing.inner .logo-short {
             display: block;
-            animation: instantHide 0.1s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            animation: fadeOutShort 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
         body.morphing.inner .logo-full {
             display: block;
             transform-origin: left center;
-            animation: cropAndGrow 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+            animation: softCropAndGrow 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
         }
 
-        @keyframes moveAndClip {
+        @keyframes moveAndSoftClip {
             0% {
                 left: 50%;
                 top: 15vh;
@@ -139,16 +139,16 @@
                 left: 2rem;
                 top: 1.5rem;
                 transform: translateX(0);
-                max-width: 44px;
+                max-width: 120px;  /* достаточно для буквы + чуть пространства */
             }
         }
 
-        @keyframes moveAndExpand {
+        @keyframes moveAndSoftExpand {
             0% {
                 left: 2rem;
                 top: 1.5rem;
                 transform: translateX(0);
-                max-width: 44px;
+                max-width: 120px;
             }
             100% {
                 left: 50%;
@@ -158,26 +158,26 @@
             }
         }
 
-        @keyframes instantHide {
+        @keyframes fadeOutShort {
             0% {
                 opacity: 1;
             }
-            1% {
-                opacity: 0;
+            30% {
+                opacity: 0.7;
             }
             100% {
                 opacity: 0;
             }
         }
 
-        @keyframes cropAndGrow {
+        @keyframes softCropAndGrow {
             0% {
                 opacity: 0;
-                clip-path: inset(0 70% 0 0);
+                clip-path: inset(0 30% 0 0);  /* мягкий кроп, видна буква */
             }
-            1% {
+            20% {
                 opacity: 1;
-                clip-path: inset(0 70% 0 0);
+                clip-path: inset(0 30% 0 0);
             }
             100% {
                 opacity: 1;
@@ -292,8 +292,8 @@
         <div id="innerPageContent" style="width: 100%; display: none; justify-content: center;">
             <div class="content-box">
                 ✦ внутренняя страница ✦<br>
-                короткое пропадает мгновенно<br>
-                <span style="color: #b9adff;">широкое уже стоит с кропом и разблокируется</span>
+                очень плавно, мягкий кроп<br>
+                <span style="color: #b9adff;">буква всегда видна</span>
             </div>
         </div>
     </div>
@@ -338,7 +338,7 @@
                     
                     body.classList.remove('morphing');
                     isAnimating = false;
-                }, 600);
+                }, 800);
             }
 
             toInnerBtn.addEventListener('click', () => navigateTo('inner'));
@@ -353,14 +353,15 @@
                 img.onerror = function() {
                     if (this.classList.contains('logo-short')) {
                         this.style.backgroundColor = '#8a6de9';
-                        this.style.width = '44px';
+                        this.style.width = '60px';
                         this.style.height = '44px';
                         this.style.borderRadius = '8px';
                     } else {
                         this.style.backgroundColor = '#8a6de9';
-                        this.style.width = '120px';
+                        this.style.width = '160px';
                         this.style.height = '44px';
                         this.style.borderRadius = '8px';
+                        this.style.background = 'linear-gradient(90deg, #8a6de9 70px, #b09aff 70px)';
                     }
                 };
             });
