@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Logo morph · центр + шрифты</title>
+    <title>Logo morph · ручная подстройка</title>
     <style>
         @font-face {
             font-family: 'Onder';
@@ -66,7 +66,15 @@
         /* HOME */
         .home .logo-container {
             position: absolute;
-            left: 50%;
+            /* ============================================= */
+            /* ПОЗИЦИЯ ЛОГОТИПА НА ГЛАВНОЙ ЭКРАНЕ          */
+            /* left: 50% - строгий центр                    */
+            /* Чуть меньше 50% - смещение влево             */
+            /* Чуть больше 50% - смещение вправо            */
+            /* РЕКОМЕНДАЦИЯ: меняй значение с 50% на 49%    */
+            /* или 48% и смотри, как встанет                */
+            /* ============================================= */
+            left: 54%;
             top: 2rem;
             transform: translateX(-50%);
             width: fit-content;
@@ -322,6 +330,10 @@
             outline: none;
         }
 
+        body {
+            overflow-x: hidden;
+        }
+
         @media (orientation: landscape) {
             .home .logo-container {
                 top: 2rem;
@@ -352,7 +364,7 @@
         <!-- контент для главной страницы -->
         <div class="home-content" id="homeContent">
             <h1>Onder</h1>
-            <p>Этот заголовок теперь 3.5rem, а текст 1.3rem. Логотип прижался к верху и теперь точно доезжает до центра при возвращении — проверь сам.</p>
+            <p>Логотип сверху. Меняй значение left в CSS (сейчас 50%) и смотри, как встанет.</p>
             <button class="btn" id="toInnerBtn">→ на внутреннюю</button>
         </div>
 
@@ -360,9 +372,9 @@
         <div class="inner-content" id="innerContent" style="display: none;">
             <h2>Внутренняя</h2>
             <div class="card">
-                <p><strong>Ubuntu Bold 1.25rem</strong> — акценты стали чуть крупнее</p>
-                <p>Обычный текст Ubuntu 1.2rem, строки 1.7. Логотип слева — кнопка назад. Смотри, как плавно он возвращается ровно в центр, без скачков.</p>
-                <p>Отступ сверху теперь 2rem везде, одинаково для обоих состояний.</p>
+                <p><strong>Подстройка позиции</strong></p>
+                <p>Кликни по короткому логотипу слева, чтобы вернуться на главную и проверить, ровно ли встал широкий логотип.</p>
+                <p>Когда найдёшь идеальное значение — скажешь, я поправлю анимацию под него.</p>
             </div>
         </div>
 
