@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>WARPOINT HOME</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="home" id="main-page">
+    <div class="app">
+        <div class="logo-container">
+            <a href="index.html" class="logo-link" id="logoButton">
+                <div class="logo-svg-wrapper">
+                    <img class="logo-full" src="svgs/logofull.svg" alt="Full logo" draggable="false" onerror="this.style.backgroundColor='#8a6de9';this.style.width='180px';this.style.height='44px';this.style.borderRadius='8px';this.style.background='linear-gradient(90deg, #8a6de9 90px, #b09aff 90px)'">
+                    <img class="logo-short" src="svgs/logoshort.svg" alt="Short logo" draggable="false" onerror="this.style.backgroundColor='#8a6de9';this.style.width='70px';this.style.height='44px';this.style.borderRadius='8px'">
+                </div>
+            </a>
+        </div>
+
+        <!-- Карточки-навигации на главной -->
+        <div class="home-content" id="homeContent">
+            <a href="combo.html" class="nav-card">Комбо</a>
+            <a href="birthdays.html" class="nav-card">Дни рождения</a>
+            <a href="corporate.html" class="nav-card">Корпоративы</a>
+            <a href="registration.html" class="nav-card">Регистрация</a>
+        </div>
+
+        <!-- контент для внутренней страницы (скрыт на главной) -->
+        <div class="inner-content" id="innerContent" style="display: none;">
+            <h2>Внутренняя</h2>
+            <!-- здесь будет контент внутренних страниц -->
+        </div>
+
+        <!-- индикатор -->
+        <div class="page-indicator" id="pageLabel">главная · широкий логотип</div>
+    </div>
+
+    <script>
+        (function() {
+            const body = document.getElementById('main-page');
+            const logoBtn = document.getElementById('logoButton');
+            const pageLabel = document.getElementById('pageLabel');
+            const homeContent = document.getElementById('homeContent');
+            const innerContent = document.getElementById('innerContent');
+            const logoContainer = document.querySelector('.logo-container');
+            
+            let isAnimating = false;
+
+            // Функция навигации (для логотипа и кнопок)
+            function navigateTo(targetPage) {
+                if (isAnimating) return;
+                
+                const currentIsHome = body.classList.contains('home');
+                
+                if ((targetPage === 'home' && currentIsHome) || (targetPage === 'inner' && !currentIsHome)) {
+                    return;
+                }
+
+                isAnimating = true;
+                body.classList.add('morphing');
+
+                setTimeout(() => {
+                    if (targetPage === 'inner') {
+                        body.classList.remove('home');
+                        body.classList.add('inner');
+                        pageLabel.innerText = 'внутренняя · короткий логотип (кликни по нему)';
+                        homeContent.style.display = 'none';
+                        innerContent.style.display = 'block';
+                        logoContainer.style.maxWidth = '';
+                    } else {
+                        body.classList.remove('inner');
+                        body.classList.add('home');
+                        pageLabel.innerText = 'главная · широкий логотип';
+                        homeContent.style.display = 'flex'; // меняем обратно на flex, так как на главной grid
+                        innerContent.style.display = 'none';
+                        logoContainer.style.maxWidth = '';
+                    }
+                    
+                    body.classList.remove('morphing');
+                    isAnimating = false;
+                }, 800);
+            }
+
+            // Логотип работает как кнопка "на главную" только на внутренних страницах
+            logoBtn.addEventListener('click', (e) => {
+                // Для внутренних страниц (не index.html) ссылка на index.html сработает сама
+                // Этот обработчик в основном для анимации, но мы его оставим для плавности
+                if (body.classList.contains('inner')) {
+                    e.preventDefault(); // предотвращаем прямой переход, делаем с анимацией
+                    navigateTo('home');
+                }
+                // Если мы на главной, ссылка на index.html просто перезагрузит страницу - это ок
+            });
+
+            // Эмуляция перехода при загрузке страницы (для демо)
+            // Проверяем, не внутренняя ли это страница (по URL)
+            const path = window.location.pathname;
+            if (path.includes('combo.html') || path.includes('birthdays.html') || 
+                path.includes('corporate.html') || path.includes('registration.html')) {
+                // Если мы на одной из новых страниц, применяем класс inner
+                body.classList.remove('home');
+                body.classList.add('inner');
+                pageLabel.innerText = 'внутренняя · короткий логотип (кликни по лого)';
+                homeContent.style.display = 'none';
+                innerContent.style.display = 'block';
+                // Меняем заголовок h2 на название страницы
+                const pageTitle = document.querySelector('.inner-content h2');
+                if (path.includes('combo')) pageTitle.innerText = 'Комбо';
+                if (path.includes('birthdays')) pageTitle.innerText = 'Дни рождения';
+                if (path.includes('corporate')) pageTitle.innerText = 'Корпоративы';
+                if (path.includes('registration')) pageTitle.innerText = 'Регистрация';
+            }
+
+            // Стили для курсора
+            const style = document.createElement('style');
+            style.textContent = `
+                .inner .logo-link {
+                    cursor: pointer;
+                }
+                .home .logo-link {
+                    cursor: default;
+                }
+                img {
+                    border: none !important;
+                    outline: none !important;
+                    box-shadow: none !important;
+                }
+            `;
+            document.head.appendChild(style);
+        })();
+    </script>
+</body>
+</html>
