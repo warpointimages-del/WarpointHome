@@ -1,1 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Logo morph · test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            background-color: #323549;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.2s;
+        }
+
+        /* main container — landscape friendly, no portrait tricks */
+        .app {
+            max-width: 100vw;
+            min-height: 100vh;
+            padding: 1.5rem 2rem 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;   /* left for inner pages, but home uses center */
+            position: relative;
+        }
+
+        /* home page specific – center logo, but morph anchor still left */
+        .home .logo-container {
+            align-self: center;
+            width: fit-content;
+            max-width: 90vw;
+            margin-top: 15vh;          /* give some air, looks good on landscape */
+        }
+
+        /* inner page – logo stays left, compact */
+        .inner .logo-container {
+            align-self: flex-start;
+            margin-top: 0;
+        }
+
+        /* the clickable logo wrapper – holds both svg versions */
+        .logo-link {
+            display: inline-block;
+            text-decoration: none;
+            cursor: pointer;
+            outline: none;             /* focus ring optional, but keep clean */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* svg container — fluid, relative for pseudo morph */
+        .logo-svg-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+            width: fit-content;
+            height: auto;
+        }
+
+        /* both svgs initially hidden, toggled by page class + morph class */
+        .logo-short,
+        .logo-full {
+            display: block;
+            height: auto;
+            transition: opacity 0.25s ease, transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+            will-change: transform, opacity, width;
+        }
+
+        /* default — only full visible (home) */
+        .logo-short {
+            display: none;
+        }
+
+        .home .logo-full {
+            display: block;
+            width: auto;
+            max-width: 70vw;           /* never too wide, but keeps ratio */
+            max-height: 12vh;
+            object-fit: contain;
+        }
+
+        .home .logo-short {
+            display: none;
+        }
+
+        /* inner page: only short logo visible, placed left */
+        .inner .logo-short {
+            display: block;
+            width: auto;
+            height: 8vh;                /* comfortable tap size, landscape */
+            min-height: 44px;            /* touch friendly */
+            max-width: 40vw;
+            object-fit: contain;
+        }
+
+        .inner .logo-full {
+            display: none;
+        }
+
+        /* ------ MORPH TRANSITION (triggered by .morphing class) ------ */
+        /* state while animating: both logos visible, full does a left squeeze */
+        .logo-link.morphing .logo-svg-wrapper {
+            /* no extra wrapper shift, just svgs inside do the trick */
+        }
+
+        .logo-link.morphing .logo-full {
+            display: block;              /* force visible during morph */
+            opacity: 1;
+            transform-origin: left center;
+            animation: shrinkFromRight 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+        }
+
+        .logo-link.morphing .logo-short {
+            display: block;              /* appear and fade in? better just appear */
+            opacity: 0;
+            width: 0;                    /* start collapsed, then expand? We'll do keyframes on short */
+            transform-origin: left center;
+            animation: appearShort 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+        }
+
+        /* after animation ends we remove morphing class — but pages switch via class + nav */
+        /* home morph: full → short, but final page will be .inner */
+        /* inner morph: (reverse) but we keep simple: always nav changes page + animation */
+
+        @keyframes shrinkFromRight {
+            0% {
+                width: auto;
+                opacity: 1;
+                transform: scaleX(1) translateX(0);
+            }
+            40% {
+                opacity: 0.9;
+            }
+            100% {
+                width: 0;                 /* collapses from right */
+                opacity: 0;
+                transform: scaleX(0.2) translateX(-15%); /* extra left drift */
+            }
+        }
+
+        @keyframes appearShort {
+            0% {
+                width: 0;
+                opacity: 0;
+                transform: translateX(-10px) scaleX(0.5);
+            }
+            50% {
+                opacity: 0.3;
+                width: auto;
+                transform: translateX(0) scaleX(0.9);
+            }
+            100% {
+                width: auto;
+                opacity: 1;
+                transform: scaleX(1) translateX(0);
+            }
+        }
+
+        /* for reverse direction (if we ever go back to home) - could add second animation */
+        /* but we currently trigger only on navigate to inner; back to home similar */
+        .logo-link.morphing-back .logo-full {
+            animation: growFromLeft 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+        }
+
+        .logo-link.morphing-back .logo-short {
+            animation: hideShort 0.45s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+        }
+
+        @keyframes growFromLeft {
+            0% {
+                width: 0;
+                opacity: 0;
+                transform: scaleX(0.2) translateX(-15%);
+            }
+            100% {
+                width: auto;
+                opacity: 1;
+                transform: scaleX(1) translateX(0);
+            }
+        }
+        @keyframes hideShort {
+            0% { width: auto; opacity: 1; transform: scaleX(1); }
+            100% { width: 0; opacity: 0; transform: scaleX(0.5) translateX(-15%); }
+        }
+
+        /* buttons / navigation */
+        .nav-spacer {
+            flex: 1 1 auto;
+            min-height: 3rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 2.5rem;
+            align-self: center;
+        }
+
+        .btn {
+            background: #4d506b;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            padding: 0.9rem 2.2rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            box-shadow: 0 8px 0 #2a2c3b, 0 10px 20px rgba(0,0,0,0.3);
+            transition: all 0.1s ease;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            border: 2px solid #6a6e8c;
+            touch-action: manipulation;
+        }
+
+        .btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #2a2c3b, 0 5px 12px rgba(0,0,0,0.3);
+        }
+
+        .page-indicator {
+            color: #b9bff2;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: rgba(0,0,0,0.2);
+            padding: 0.4rem 1.2rem;
+            border-radius: 40px;
+            align-self: center;
+            margin-top: 2rem;
+            backdrop-filter: blur(2px);
+        }
+
+        /* inner page additional styling */
+        .inner .content-box {
+            background: #3d405b;
+            padding: 2rem;
+            border-radius: 3rem;
+            color: #eaeefc;
+            width: 100%;
+            max-width: 500px;
+            align-self: center;
+            margin-top: 2rem;
+            border: 2px solid #5f6382;
+            box-shadow: 0 15px 0 #2a2c3b;
+        }
+
+        /* placeholder for repo images – set via github paths */
+        .logo-short {
+            content: url('svgs/logoshort.svg');    /* will be overridden if 404, but fine */
+        }
+
+        .logo-full {
+            content: url('svgs/logofull.svg');
+        }
+
+        /* fallback if svg missing — colored boxes (visual test) */
+        .logo-short[src="svgs/logoshort.svg"],
+        .logo-full[src="svgs/logofull.svg"] {
+            background: #ffb347;
+            border-radius: 20px;
+            min-width: 60px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: black;
+            font-weight: bold;
+        }
+
+        /* for testing without actual files: pseudo element fallback won't show content, but background appears */
+        .logo-short:not([src*=".svg"]),
+        .logo-full:not([src*=".svg"]) {
+            background: #f06;
+        }
+
+        /* home/inner distinction */
+        .home .btn-secondary {
+            background: #2f354a;
+        }
+
+        /* use landscape-aware spacing */
+        @media (orientation: landscape) {
+            .home .logo-container {
+                margin-top: 8vh;
+            }
+            .inner .logo-short {
+                height: 12vh;
+            }
+        }
+    </style>
+</head>
+<body class="home" id="main-page-root">
+    <div class="app" id="appContainer">
+        <!-- logo container: depends on home/inner class (body) -->
+        <div class="logo-container">
+            <a href="#" class="logo-link" id="morphLogo" onclick="return false;" style="outline: none;">
+                <div class="logo-svg-wrapper">
+                    <!-- both SVGs: references from github repo -->
+                    <img class="logo-full" src="svgs/logofull.svg" alt="Full logo" draggable="false">
+                    <img class="logo-short" src="svgs/logoshort.svg" alt="Short logo" draggable="false">
+                </div>
+            </a>
+        </div>
+
+        <!-- navigation / demo switch -->
+        <div class="nav-links">
+            <button class="btn" id="goToInnerBtn" onclick="animateAndGo('inner')">→ внутрь</button>
+            <button class="btn btn-secondary" id="goToHomeBtn" onclick="animateAndGo('home')">← на главную</button>
+        </div>
+
+        <!-- dynamic page indicator & extra content -->
+        <div class="page-indicator" id="pageLabel">главная · full лого</div>
+
+        <!-- inner page extra sample (hidden on home) -->
+        <div id="innerContent" style="display: none; width: 100%; display: flex; justify-content: center;">
+            <div class="content-box">
+                ✦ внутренняя страница ✦<br>
+                здесь только короткий логотип слева.<br>
+                <span style="color: #b9adff;">landscape rules, портрет не используется</span>
+            </div>
+        </div>
+
+        <!-- also show placeholder on home? just a little text -->
+        <div style="align-self: center; margin-top: 2rem; color: #a5a9cf; text-align: center;">
+            ⬇︎ нажми кнопку, логотип улетит влево ⬇︎
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const body = document.getElementById('main-page-root');
+            const logoLink = document.getElementById('morphLogo');
+            const homeBtn = document.getElementById('goToHomeBtn');
+            const innerBtn = document.getElementById('goToInnerBtn');
+            const pageLabel = document.getElementById('pageLabel');
+            const innerContentDiv = document.getElementById('innerContent');
+
+            // Ensure initial state is home
+            body.classList.add('home');
+            body.classList.remove('inner');
+            pageLabel.innerText = 'главная · full лого';
+            if(innerContentDiv) innerContentDiv.style.display = 'none';
+
+            // shared morph function
+            function animateAndGo(targetPage) {
+                // prevent mid-animation chaos
+                if (logoLink.classList.contains('morphing') || logoLink.classList.contains('morphing-back')) return;
+
+                const currentIsHome = body.classList.contains('home');
+                // determine direction: home->inner = forward morph; inner->home = backward morph
+                if (targetPage === 'inner' && currentIsHome) {
+                    // home → inner: full → short (morphing class)
+                    logoLink.classList.add('morphing');
+                    setTimeout(() => {
+                        // switch page class after animation ends
+                        body.classList.remove('home');
+                        body.classList.add('inner');
+                        pageLabel.innerText = 'внутренняя · short лого';
+                        if (innerContentDiv) innerContentDiv.style.display = 'flex';
+                        // kill morph classes
+                        logoLink.classList.remove('morphing');
+                        // optional ensure correct logos (already via css)
+                    }, 430); // slightly less than 450ms
+                }
+                else if (targetPage === 'home' && !currentIsHome) {
+                    // inner → home: reverse morph
+                    logoLink.classList.add('morphing-back');
+                    setTimeout(() => {
+                        body.classList.remove('inner');
+                        body.classList.add('home');
+                        pageLabel.innerText = 'главная · full лого';
+                        if (innerContentDiv) innerContentDiv.style.display = 'none';
+                        logoLink.classList.remove('morphing-back');
+                    }, 430);
+                } else {
+                    // same page: just update label if needed (no animation)
+                    if (targetPage === 'home' && currentIsHome) {
+                        // already home, do nothing
+                    } else if (targetPage === 'inner' && !currentIsHome) {
+                        // already inner
+                    }
+                }
+            }
+
+            // Expose function globally (for onclick)
+            window.animateAndGo = animateAndGo;
+
+            // additional: click on logo itself toggles demo? but we avoid.
+            // fix double events: buttons use onclick, no href jump.
+
+            // patch for innerContent visibility on body class change (in case manual)
+            function syncInnerContent() {
+                if (!innerContentDiv) return;
+                if (body.classList.contains('inner')) {
+                    innerContentDiv.style.display = 'flex';
+                } else {
+                    innerContentDiv.style.display = 'none';
+                }
+            }
+            // observe body class changes (simple interval fallback, but just call after timeouts)
+            const originalTimeoutFn = setTimeout;
+            // better override not needed, we already update inside timeouts.
+
+            // also if class changed manually via devtools – but fine.
+            // make sure inner content starts hidden
+            syncInnerContent();
+
+            // fallback for svg loading errors: keep background indicator
+            const imgs = document.querySelectorAll('.logo-full, .logo-short');
+            imgs.forEach(img => {
+                img.onerror = function() {
+                    this.style.backgroundColor = '#8a6de9';
+                    this.style.minWidth = '100px';
+                    this.style.minHeight = '60px';
+                    this.style.borderRadius = '30px';
+                };
+            });
+        })();
+    </script>
+    <!-- ensure innerContent is correctly shown/hidden after animation -->
+    <style>
+        /* dynamic visibility for inner block controlled by script, but also fallback */
+        #innerContent {
+            width: 100%;
+            display: none;
+            justify-content: center;
+        }
+        .inner #innerContent {
+            display: flex !important; /* if class inner, show (overrides) — but script also sets, just safe */
+        }
+        .home #innerContent {
+            display: none !important;
+        }
+    </style>
+    <!-- fix: override inline style conflict; but we have script style both, but css class wins if class present -->
+    <!-- remove any conflicting inline display from script? we already set .style, but CSS class rule will override because !important -->
+    <!-- good: .inner #innerContent wins over [style] if important, so it's consistent -->
+</body>
+</html>
