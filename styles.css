@@ -96,7 +96,7 @@ body {
 }
 
 .logo-container {
-    transition: left 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+    transition: left 0.8s cubic-bezier(0.65, 0, 0.35, 1);
     z-index: 10;
 }
 
@@ -114,9 +114,9 @@ body {
     width: fit-content;
 }
 
-/* АНИМАЦИЯ - ускорена до 0.4s */
+/* АНИМАЦИЯ */
 body.morphing.home .logo-container {
-    animation: moveLeft 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation: moveLeft 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 body.morphing.home .logo-full {
@@ -131,18 +131,18 @@ body.morphing.home .logo-short {
 }
 
 body.morphing.inner .logo-container {
-    animation: moveRight 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation: moveRight 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 body.morphing.inner .logo-short {
     display: block;
-    animation: hideShort 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation: hideShort 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 body.morphing.inner .logo-full {
     display: block;
     transform-origin: left center;
-    animation: cropAndGrow 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation: cropAndGrow 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 @keyframes moveLeft {
@@ -173,18 +173,18 @@ body.morphing.inner .logo-full {
 
 @keyframes hideShort {
     0% { opacity: 1; }
-    20% { opacity: 0; }
+    5% { opacity: 0; }
     100% { opacity: 0; }
 }
 
 @keyframes cropAndGrow {
     0% {
         opacity: 0;
-        clip-path: inset(0 3% 0 0);
+        clip-path: inset(0 25% 0 0);
     }
-    20% {
+    5% {
         opacity: 1;
-        clip-path: inset(0 3% 0 0);
+        clip-path: inset(0 25% 0 0);
     }
     100% {
         opacity: 1;
