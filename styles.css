@@ -180,11 +180,11 @@ body.morphing.inner .logo-full {
 @keyframes cropAndGrow {
     0% {
         opacity: 0;
-        clip-path: inset(0 10% 0 0);
+        clip-path: inset(0 3% 0 0);
     }
     20% {
         opacity: 1;
-        clip-path: inset(0 10% 0 0);
+        clip-path: inset(0 3% 0 0);
     }
     100% {
         opacity: 1;
