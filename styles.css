@@ -23,8 +23,8 @@
 }
 
 :root {
-    /* РЕГУЛИРУЙ ЭТО ЗНАЧЕНИЕ — сколько процентов ОСТАВЛЯЕМ от полного логотипа */
-    /* Чем меньше число, тем больше обрезается. Для иконки 90px из полного 300px = 30% */
+    /* РЕГУЛИРУЙ ЭТО ЗНАЧЕНИЕ — сколько процентов ОСТАВЛЯЕМ ОТ ЛОГОФУЛА */
+    /* Если логошорт занимает 30% ширины логофула, ставь 30% */
     --logo-crop-remain: 30%;
 }
 
@@ -80,7 +80,7 @@ body {
     position: relative;
 }
 
-/* общие стили для логотипов */
+/* ЛОГОТИПЫ */
 .logo-full, .logo-short {
     height: 8vh;
     min-height: 44px;
@@ -89,16 +89,18 @@ body {
     background: transparent;
     border: none;
     outline: none;
+    display: block;
 }
 
-/* HOME */
+/* HOME - логотип по центру */
 .home .logo-container {
     position: absolute;
     left: 50%;
     top: 2rem;
     transform: translateX(-50%);
-    width: fit-content;
-    overflow: hidden;
+    width: auto;
+    overflow: visible;
+    z-index: 10;
 }
 
 .home .logo-short {
@@ -109,30 +111,23 @@ body {
     display: block;
 }
 
-/* INNER */
+/* INNER - логотип слева */
 .inner .logo-container {
     position: absolute;
     left: 2rem;
     top: 2rem;
-    transform: none;
-    width: fit-content;
-    overflow: hidden;
-}
-
-.inner .logo-full {
-    display: none;
+    width: auto;
+    overflow: visible;
+    z-index: 10;
 }
 
 .inner .logo-short {
     display: block;
     cursor: pointer;
-    height: 8vh;
-    min-height: 44px;
 }
 
-.logo-container {
-    transition: left 0.4s cubic-bezier(0.65, 0, 0.35, 1);
-    z-index: 10;
+.inner .logo-full {
+    display: none;
 }
 
 .logo-link {
@@ -147,78 +142,80 @@ body {
     align-items: center;
     justify-content: center;
     width: fit-content;
+    position: relative;
 }
 
-/* АНИМАЦИЯ ЛОГОТИПА */
+/* АНИМАЦИЯ ПРИ ПЕРЕХОДЕ С ГЛАВНОЙ НА ВНУТРЕННЮЮ */
 body.morphing.home .logo-container {
-    animation: moveLeft 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation: slideLogoToLeft 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 body.morphing.home .logo-full {
-    display: block;
-    transform-origin: left center;
-    width: auto;
-    max-width: none;
+    animation: cropLogoToShort 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 body.morphing.home .logo-short {
     display: none;
 }
 
+/* АНИМАЦИЯ ПРИ ПЕРЕХОДЕ С ВНУТРЕННЕЙ НА ГЛАВНУЮ */
 body.morphing.inner .logo-container {
-    animation: moveRight 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation: slideLogoToCenter 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 body.morphing.inner .logo-short {
-    display: block;
-    animation: hideShort 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation: fadeOutShort 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 body.morphing.inner .logo-full {
     display: block;
-    transform-origin: left center;
-    animation: cropAndGrow 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation: growLogoToFull 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
-@keyframes moveLeft {
+/* КЛЮЧЕВЫЕ КАДРЫ */
+@keyframes slideLogoToLeft {
     0% {
         left: 50%;
         transform: translateX(-50%);
-        max-width: 100vw;
     }
     100% {
         left: 2rem;
         transform: translateX(0);
-        max-width: 90px;
     }
 }
 
-@keyframes moveRight {
+@keyframes cropLogoToShort {
     0% {
-        left: 2rem;
-        transform: translateX(0);
-        max-width: 90px;
+        clip-path: inset(0 0 0 0);
     }
     100% {
-        left: 52.5%;
-        transform: translateX(-50%);
-        max-width: 100vw;
-    }
-}
-
-@keyframes hideShort {
-    0% { opacity: 1; }
-    20% { opacity: 0; }
-    100% { opacity: 0; }
-}
-
-@keyframes cropAndGrow {
-    0% {
-        opacity: 0;
         clip-path: inset(0 calc(100% - var(--logo-crop-remain)) 0 0);
     }
-    20% {
+}
+
+@keyframes slideLogoToCenter {
+    0% {
+        left: 2rem;
+        transform: translateX(0);
+    }
+    100% {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes fadeOutShort {
+    0% {
         opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes growLogoToFull {
+    0% {
+        opacity: 0;
         clip-path: inset(0 calc(100% - var(--logo-crop-remain)) 0 0);
     }
     100% {
@@ -243,7 +240,7 @@ body.morphing.inner .logo-full {
     font-weight: normal;
 }
 
-/* Стили для карточек-навигации на главной - сетка 2x2 */
+/* КАРТОЧКИ НА ГЛАВНОЙ - СЕТКА 2x2 */
 .home-content {
     width: 100%;
     max-width: 900px;
@@ -288,7 +285,7 @@ body.morphing.inner .logo-full {
     box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.3);
 }
 
-/* контент для внутренних страниц */
+/* ВНУТРЕННИЕ СТРАНИЦЫ */
 .inner-content {
     width: 100%;
     max-width: 650px;
@@ -304,31 +301,22 @@ body.morphing.inner .logo-full {
     text-shadow: 0 4px 0 #2a2c3b;
 }
 
+/* ДОПОЛНИТЕЛЬНО */
 img {
     background: transparent;
     border: none;
     outline: none;
 }
 
-.home .logo-full {
-    margin: 0 auto;
+.home .logo-link {
+    cursor: default;
 }
 
 .inner .logo-link {
     cursor: pointer;
 }
 
-.home .logo-link {
-    cursor: default;
-}
-
-img {
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-/* Адаптивность для мобильных */
+/* АДАПТИВНОСТЬ */
 @media (max-width: 600px) {
     .home-content {
         gap: 1rem;
