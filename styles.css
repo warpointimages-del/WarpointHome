@@ -208,7 +208,7 @@ body.morphing.inner .logo-full {
     font-weight: normal;
 }
 
-/* Стили для карточек-навигации на главной - сетка 2x2 */
+/* ========== НОВЫЕ СТИЛИ ДЛЯ КАРТОЧЕК ========== */
 .home-content {
     width: 100%;
     max-width: 900px;
@@ -253,7 +253,6 @@ body.morphing.inner .logo-full {
     box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.3);
 }
 
-/* контент для внутренних страниц */
 .inner-content {
     width: 100%;
     max-width: 650px;
@@ -295,6 +294,21 @@ img {
     border: none !important;
     outline: none !important;
     box-shadow: none !important;
+}
+
+@media (orientation: landscape) {
+    .home .logo-container {
+        top: 2rem;
+    }
+    .inner .logo-container {
+        top: 2rem;
+    }
+    .home-content {
+        margin-top: 25vh;
+    }
+    .inner-content {
+        margin-top: 15vh;
+    }
 }
 
 /* Адаптивность для мобильных */
