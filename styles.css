@@ -22,6 +22,12 @@
     font-display: swap;
 }
 
+:root {
+    /* РЕГУЛИРУЙ ЭТО ЗНАЧЕНИЕ — сколько процентов ОСТАВЛЯЕМ от полного логотипа */
+    /* Чем меньше число, тем больше обрезается. Для иконки 90px из полного 300px = 30% */
+    --logo-crop-remain: 30%;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -33,6 +39,35 @@ body {
     font-family: 'Ubuntu', system-ui, -apple-system, sans-serif;
     min-height: 100vh;
     color: #eaeefc;
+    overflow-x: hidden;
+}
+
+/* КОНТЕЙНЕР ДЛЯ ПЕРЕХОДОВ */
+.page-transition-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+.transition-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #323549;
+    transform: translateX(100%);
+    will-change: transform;
+    transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.transition-overlay.active {
+    transform: translateX(0);
 }
 
 .app {
@@ -96,7 +131,7 @@ body {
 }
 
 .logo-container {
-    transition: left 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+    transition: left 0.4s cubic-bezier(0.65, 0, 0.35, 1);
     z-index: 10;
 }
 
@@ -114,9 +149,9 @@ body {
     width: fit-content;
 }
 
-/* АНИМАЦИЯ */
+/* АНИМАЦИЯ ЛОГОТИПА */
 body.morphing.home .logo-container {
-    animation: moveLeft 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation: moveLeft 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 body.morphing.home .logo-full {
@@ -131,18 +166,18 @@ body.morphing.home .logo-short {
 }
 
 body.morphing.inner .logo-container {
-    animation: moveRight 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation: moveRight 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 body.morphing.inner .logo-short {
     display: block;
-    animation: hideShort 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation: hideShort 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 body.morphing.inner .logo-full {
     display: block;
     transform-origin: left center;
-    animation: cropAndGrow 0.8s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    animation: cropAndGrow 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
 @keyframes moveLeft {
@@ -173,18 +208,18 @@ body.morphing.inner .logo-full {
 
 @keyframes hideShort {
     0% { opacity: 1; }
-    5% { opacity: 0; }
+    20% { opacity: 0; }
     100% { opacity: 0; }
 }
 
 @keyframes cropAndGrow {
     0% {
         opacity: 0;
-        clip-path: inset(0 40% 0 0);
+        clip-path: inset(0 calc(100% - var(--logo-crop-remain)) 0 0);
     }
-    5% {
+    20% {
         opacity: 1;
-        clip-path: inset(0 40% 0 0);
+        clip-path: inset(0 calc(100% - var(--logo-crop-remain)) 0 0);
     }
     100% {
         opacity: 1;
@@ -208,7 +243,7 @@ body.morphing.inner .logo-full {
     font-weight: normal;
 }
 
-/* ========== НОВЫЕ СТИЛИ ДЛЯ КАРТОЧЕК ========== */
+/* Стили для карточек-навигации на главной - сетка 2x2 */
 .home-content {
     width: 100%;
     max-width: 900px;
@@ -253,6 +288,7 @@ body.morphing.inner .logo-full {
     box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.3);
 }
 
+/* контент для внутренних страниц */
 .inner-content {
     width: 100%;
     max-width: 650px;
@@ -274,10 +310,6 @@ img {
     outline: none;
 }
 
-body {
-    overflow-x: hidden;
-}
-
 .home .logo-full {
     margin: 0 auto;
 }
@@ -294,21 +326,6 @@ img {
     border: none !important;
     outline: none !important;
     box-shadow: none !important;
-}
-
-@media (orientation: landscape) {
-    .home .logo-container {
-        top: 2rem;
-    }
-    .inner .logo-container {
-        top: 2rem;
-    }
-    .home-content {
-        margin-top: 25vh;
-    }
-    .inner-content {
-        margin-top: 15vh;
-    }
 }
 
 /* Адаптивность для мобильных */
