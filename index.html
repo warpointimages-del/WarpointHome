@@ -13,22 +13,20 @@
     
     <div class="app">
         <div class="logo-container">
-            <a href="index.html" class="logo-link" id="logoButton">
-                <div class="logo-svg-wrapper">
-                    <img class="logo-full" src="svgs/logofull.svg" alt="Full logo" draggable="false">
-                    <img class="logo-short" src="svgs/logoshort.svg" alt="Short logo" draggable="false">
-                </div>
-            </a>
+            <div class="logo-svg-wrapper">
+                <img class="logo-full" src="svgs/logofull.svg" alt="Full logo" draggable="false">
+                <img class="logo-short" src="svgs/logoshort.svg" alt="Short logo" draggable="false">
+            </div>
         </div>
 
-        <div class="home-content" id="homeContent">
+        <div class="home-content">
             <a href="combo.html" class="nav-card" data-url="combo.html">Комбо</a>
             <a href="birthdays.html" class="nav-card" data-url="birthdays.html">Дни рождения</a>
             <a href="corporate.html" class="nav-card" data-url="corporate.html">Корпоративы</a>
             <a href="registration.html" class="nav-card" data-url="registration.html">Регистрация</a>
         </div>
 
-        <div class="page-indicator" id="pageLabel">главная · широкий логотип</div>
+        <div class="page-indicator">Станколит</div>
     </div>
 
     <script>
@@ -37,35 +35,24 @@
             const overlay = document.getElementById('transitionOverlay');
             let isTransitioning = false;
 
-            // Функция анимированного перехода
-            function navigateWithTransition(url) {
+            function navigateToInner(url) {
                 if (isTransitioning) return;
                 isTransitioning = true;
                 
-                // Запускаем анимацию логотипа
                 body.classList.add('morphing');
-                
-                // Запускаем оверлей (слайд)
                 overlay.classList.add('active');
                 
-                // Ждём окончания анимации и переходим
                 setTimeout(() => {
                     window.location.href = url;
                 }, 400);
             }
 
-            // Обработчики для карточек
             document.querySelectorAll('.nav-card').forEach(card => {
                 card.addEventListener('click', (e) => {
                     e.preventDefault();
                     const url = card.getAttribute('data-url');
-                    navigateWithTransition(url);
+                    navigateToInner(url);
                 });
-            });
-
-            // Логотип на главной ничего не делает
-            document.getElementById('logoButton').addEventListener('click', (e) => {
-                e.preventDefault();
             });
         })();
     </script>
