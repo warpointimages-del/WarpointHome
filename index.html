@@ -7,10 +7,6 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="home" id="main-page">
-    <div class="page-transition-container">
-        <div class="transition-overlay" id="transitionOverlay"></div>
-    </div>
-    
     <div class="app">
         <div class="logo-container">
             <div class="logo-svg-wrapper">
@@ -19,28 +15,32 @@
             </div>
         </div>
 
-        <div class="home-content">
-            <a href="combo.html" class="nav-card" data-url="combo.html">Комбо</a>
-            <a href="birthdays.html" class="nav-card" data-url="birthdays.html">Дни рождения</a>
-            <a href="corporate.html" class="nav-card" data-url="corporate.html">Корпоративы</a>
-            <a href="registration.html" class="nav-card" data-url="registration.html">Регистрация</a>
+        <div class="page-wrapper" id="pageWrapper">
+            <div class="home-content">
+                <a href="#" class="nav-card" data-url="combo.html">Комбо</a>
+                <a href="#" class="nav-card" data-url="birthdays.html">Дни рождения</a>
+                <a href="#" class="nav-card" data-url="corporate.html">Корпоративы</a>
+                <a href="#" class="nav-card" data-url="registration.html">Регистрация</a>
+            </div>
+            <div class="page-indicator">Станколит</div>
         </div>
-
-        <div class="page-indicator">Станколит</div>
     </div>
 
     <script>
         (function() {
             const body = document.getElementById('main-page');
-            const overlay = document.getElementById('transitionOverlay');
+            const pageWrapper = document.getElementById('pageWrapper');
             let isTransitioning = false;
 
             function navigateToInner(url) {
                 if (isTransitioning) return;
                 isTransitioning = true;
                 
+                // Анимация логотипа
                 body.classList.add('morphing');
-                overlay.classList.add('active');
+                
+                // Анимация страницы — уезжает влево
+                pageWrapper.classList.add('slide-out-left');
                 
                 setTimeout(() => {
                     window.location.href = url;
