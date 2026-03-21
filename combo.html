@@ -13,19 +13,17 @@
     
     <div class="app">
         <div class="logo-container">
-            <a href="index.html" class="logo-link" id="logoButton">
-                <div class="logo-svg-wrapper">
-                    <img class="logo-full" src="svgs/logofull.svg" alt="Full logo" draggable="false">
-                    <img class="logo-short" src="svgs/logoshort.svg" alt="Short logo" draggable="false">
-                </div>
-            </a>
+            <div class="logo-svg-wrapper">
+                <img class="logo-full" src="svgs/logofull.svg" alt="Full logo" draggable="false">
+                <img class="logo-short" src="svgs/logoshort.svg" alt="Short logo" draggable="false">
+            </div>
         </div>
 
         <div class="inner-content">
             <h2>Комбо</h2>
         </div>
 
-        <div class="page-indicator">комбо · короткий логотип</div>
+        <div class="page-indicator">Станколит</div>
     </div>
 
     <script>
@@ -38,10 +36,7 @@
                 if (isTransitioning) return;
                 isTransitioning = true;
                 
-                // Запускаем анимацию логотипа
                 body.classList.add('morphing');
-                
-                // Запускаем оверлей
                 overlay.classList.add('active');
                 
                 setTimeout(() => {
@@ -49,7 +44,7 @@
                 }, 400);
             }
 
-            document.getElementById('logoButton').addEventListener('click', (e) => {
+            document.querySelector('.logo-container').addEventListener('click', (e) => {
                 e.preventDefault();
                 navigateToHome();
             });
