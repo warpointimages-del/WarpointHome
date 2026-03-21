@@ -19,9 +19,10 @@
             <div class="inner-content">
                 <h2>Корпоративы</h2>
             </div>
-            <div class="page-indicator">Станколит</div>
         </div>
     </div>
+    
+    <div class="page-indicator">Станколит</div>
 
     <script>
         (function() {
@@ -33,11 +34,9 @@
                 if (isTransitioning) return;
                 isTransitioning = true;
                 
-                // Анимация логотипа
                 body.classList.add('morphing');
-                
-                // Анимация страницы — приезжает справа (ставим класс перед переходом)
                 pageWrapper.style.transform = 'translateX(100%)';
+                pageWrapper.style.transition = 'transform 0.4s cubic-bezier(0.65, 0, 0.35, 1)';
                 
                 setTimeout(() => {
                     window.location.href = 'index.html';
@@ -49,7 +48,6 @@
                 navigateToHome();
             });
             
-            // Небольшая задержка для плавного появления страницы при загрузке
             setTimeout(() => {
                 pageWrapper.style.transform = 'translateX(0)';
                 pageWrapper.style.transition = 'transform 0.4s cubic-bezier(0.65, 0, 0.35, 1)';
