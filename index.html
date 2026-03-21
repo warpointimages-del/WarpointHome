@@ -7,53 +7,66 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="home" id="main-page">
+    <div class="page-transition-container">
+        <div class="transition-overlay" id="transitionOverlay"></div>
+    </div>
+    
     <div class="app">
         <div class="logo-container">
             <a href="index.html" class="logo-link" id="logoButton">
                 <div class="logo-svg-wrapper">
-                    <img class="logo-full" src="svgs/logofull.svg" alt="Full logo" draggable="false" onerror="this.style.backgroundColor='#8a6de9';this.style.width='180px';this.style.height='44px';this.style.borderRadius='8px';this.style.background='linear-gradient(90deg, #8a6de9 90px, #b09aff 90px)'">
-                    <img class="logo-short" src="svgs/logoshort.svg" alt="Short logo" draggable="false" onerror="this.style.backgroundColor='#8a6de9';this.style.width='70px';this.style.height='44px';this.style.borderRadius='8px'">
+                    <img class="logo-full" src="svgs/logofull.svg" alt="Full logo" draggable="false">
+                    <img class="logo-short" src="svgs/logoshort.svg" alt="Short logo" draggable="false">
                 </div>
             </a>
         </div>
 
-        <!-- Карточки-навигации на главной -->
         <div class="home-content" id="homeContent">
-            <a href="combo.html" class="nav-card" onclick="return animateToInner('combo.html')">Комбо</a>
-            <a href="birthdays.html" class="nav-card" onclick="return animateToInner('birthdays.html')">Дни рождения</a>
-            <a href="corporate.html" class="nav-card" onclick="return animateToInner('corporate.html')">Корпоративы</a>
-            <a href="registration.html" class="nav-card" onclick="return animateToInner('registration.html')">Регистрация</a>
+            <a href="combo.html" class="nav-card" data-url="combo.html">Комбо</a>
+            <a href="birthdays.html" class="nav-card" data-url="birthdays.html">Дни рождения</a>
+            <a href="corporate.html" class="nav-card" data-url="corporate.html">Корпоративы</a>
+            <a href="registration.html" class="nav-card" data-url="registration.html">Регистрация</a>
         </div>
 
-        <!-- индикатор -->
         <div class="page-indicator" id="pageLabel">главная · широкий логотип</div>
     </div>
 
     <script>
         (function() {
             const body = document.getElementById('main-page');
-            const pageLabel = document.getElementById('pageLabel');
-            
-            // Функция анимированного перехода на внутреннюю страницу
-            window.animateToInner = function(targetUrl) {
-                // Запускаем анимацию
+            const overlay = document.getElementById('transitionOverlay');
+            let isTransitioning = false;
+
+            // Функция анимированного перехода
+            function navigateWithTransition(url) {
+                if (isTransitioning) return;
+                isTransitioning = true;
+                
+                // Запускаем анимацию логотипа
                 body.classList.add('morphing');
+                
+                // Запускаем оверлей (слайд)
+                overlay.classList.add('active');
                 
                 // Ждём окончания анимации и переходим
                 setTimeout(() => {
-                    window.location.href = targetUrl;
-                }, 800);
-                
-                return false; // отменяем стандартный переход
-            };
+                    window.location.href = url;
+                }, 400);
+            }
 
-            // Обработчик для логотипа (если вдруг кликнут на главной - ничего не делаем)
-            document.getElementById('logoButton').addEventListener('click', (e) => {
-                e.preventDefault(); // просто отменяем переход
+            // Обработчики для карточек
+            document.querySelectorAll('.nav-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const url = card.getAttribute('data-url');
+                    navigateWithTransition(url);
+                });
             });
 
-            // Эмуляция при загрузке - проверяем, не с внутренней ли мы страницы вернулись
-            // (для красоты можно добавить анимацию прихода)
+            // Логотип на главной ничего не делает
+            document.getElementById('logoButton').addEventListener('click', (e) => {
+                e.preventDefault();
+            });
         })();
     </script>
 </body>
