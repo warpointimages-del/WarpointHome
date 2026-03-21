@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>WARPOINT HOME</title>
+    <title>WARPOINT · Станколит</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="home" id="main-page">
@@ -22,9 +22,10 @@
                 <a href="#" class="nav-card" data-url="corporate.html">Корпоративы</a>
                 <a href="#" class="nav-card" data-url="registration.html">Регистрация</a>
             </div>
-            <div class="page-indicator">Станколит</div>
         </div>
     </div>
+    
+    <div class="page-indicator">Станколит</div>
 
     <script>
         (function() {
@@ -36,10 +37,7 @@
                 if (isTransitioning) return;
                 isTransitioning = true;
                 
-                // Анимация логотипа
                 body.classList.add('morphing');
-                
-                // Анимация страницы — уезжает влево
                 pageWrapper.classList.add('slide-out-left');
                 
                 setTimeout(() => {
