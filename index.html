@@ -16,7 +16,7 @@
         </div>
 
         <div class="page-wrapper" id="pageWrapper">
-            <div class="home-content">
+            <div class="home-content" id="homeContent">
                 <a href="#" class="nav-card" data-url="combo.html">Комбо</a>
                 <a href="#" class="nav-card" data-url="birthdays.html">Дни рождения</a>
                 <a href="#" class="nav-card" data-url="corporate.html">Корпоративы</a>
@@ -25,13 +25,41 @@
         </div>
     </div>
     
-    <div class="page-indicator">Станколит</div>
+    <div class="page-indicator" id="pageIndicator">Станколит</div>
 
     <script>
         (function() {
             const body = document.getElementById('main-page');
             const pageWrapper = document.getElementById('pageWrapper');
+            const pageIndicator = document.getElementById('pageIndicator');
             let isTransitioning = false;
+
+            // Анимация появления элементов
+            function animateEntrance() {
+                const cards = document.querySelectorAll('.nav-card');
+                const indicator = document.getElementById('pageIndicator');
+                
+                // Сбрасываем классы
+                cards.forEach(card => {
+                    card.classList.remove('animate-item');
+                });
+                if (indicator) indicator.classList.remove('visible');
+                
+                // Форсируем reflow
+                void document.body.offsetHeight;
+                
+                // Анимируем карточки с задержкой
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('animate-item');
+                    }, index * 80);
+                });
+                
+                // Анимируем индикатор
+                setTimeout(() => {
+                    if (indicator) indicator.classList.add('visible');
+                }, cards.length * 80 + 50);
+            }
 
             function navigateToInner(url) {
                 if (isTransitioning) return;
@@ -52,6 +80,9 @@
                     navigateToInner(url);
                 });
             });
+            
+            // Запускаем анимацию при загрузке
+            animateEntrance();
         })();
     </script>
 </body>
