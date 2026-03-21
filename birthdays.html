@@ -16,19 +16,43 @@
         </div>
 
         <div class="page-wrapper" id="pageWrapper">
-            <div class="inner-content">
+            <div class="inner-content" id="innerContent">
                 <h2>Дни Рождения</h2>
             </div>
         </div>
     </div>
     
-    <div class="page-indicator">Станколит</div>
+    <div class="page-indicator" id="pageIndicator">Станколит</div>
 
     <script>
         (function() {
             const body = document.getElementById('main-page');
             const pageWrapper = document.getElementById('pageWrapper');
+            const pageIndicator = document.getElementById('pageIndicator');
             let isTransitioning = false;
+
+            // Анимация появления элементов
+            function animateEntrance() {
+                const title = document.querySelector('.inner-content h2');
+                const indicator = document.getElementById('pageIndicator');
+                
+                // Сбрасываем классы
+                if (title) title.classList.remove('animate-item');
+                if (indicator) indicator.classList.remove('visible');
+                
+                // Форсируем reflow
+                void document.body.offsetHeight;
+                
+                // Анимируем заголовок
+                setTimeout(() => {
+                    if (title) title.classList.add('animate-item');
+                }, 100);
+                
+                // Анимируем индикатор
+                setTimeout(() => {
+                    if (indicator) indicator.classList.add('visible');
+                }, 300);
+            }
 
             function navigateToHome() {
                 if (isTransitioning) return;
@@ -52,6 +76,9 @@
                 pageWrapper.style.transform = 'translateX(0)';
                 pageWrapper.style.transition = 'transform 0.4s cubic-bezier(0.65, 0, 0.35, 1)';
             }, 50);
+            
+            // Запускаем анимацию появления
+            animateEntrance();
         })();
     </script>
 </body>
