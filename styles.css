@@ -24,7 +24,7 @@
 
 :root {
     /* СКОЛЬКО ПРОЦЕНТОВ ЛОГОФУЛА ОСТАВЛЯЕМ (ЭТО ШИРИНА ЛОГОШОРТ) */
-    --short-logo-width: 25%;
+    --short-logo-width: 22%;
 }
 
 * {
@@ -51,7 +51,7 @@ body {
     position: relative;
 }
 
-/* ЛОГОТИПЫ - строго друг на друге */
+/* ЛОГОТИПЫ */
 .logo-container {
     position: absolute;
     top: 2rem;
@@ -79,7 +79,6 @@ body {
     display: block;
 }
 
-/* logoshort находится ПОД logofull (одинаковое положение) */
 .logo-short {
     position: absolute;
     top: 0;
@@ -102,18 +101,20 @@ body {
     display: block;
 }
 
-/* INNER - логотип слева */
+/* INNER - логотип слева, только logoshort */
 .inner .logo-container {
     left: 2rem;
     transform: none;
 }
 
 .inner .logo-full {
-    display: block;
+    display: none !important;
 }
 
 .inner .logo-short {
     display: block;
+    position: relative;
+    opacity: 1;
     pointer-events: auto;
     cursor: pointer;
 }
@@ -146,6 +147,7 @@ body.morphing.inner .logo-short {
 }
 
 body.morphing.inner .logo-full {
+    display: block !important;
     animation: growFromShort 0.4s cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
@@ -188,7 +190,7 @@ body.morphing.inner .logo-full {
         transform: translateX(0);
     }
     100% {
-        left: 52.5%;
+        left: 50%;
         transform: translateX(-50%);
     }
 }
@@ -225,10 +227,6 @@ body.morphing.inner .logo-full {
     transform: translateX(-100%);
 }
 
-.page-wrapper.slide-in-right {
-    transform: translateX(0);
-}
-
 /* КОНТЕНТ */
 .page-indicator {
     color: #b9bff2;
@@ -238,32 +236,39 @@ body.morphing.inner .logo-full {
     background: rgba(0,0,0,0.2);
     padding: 0.4rem 1.2rem;
     border-radius: 40px;
-    align-self: center;
-    margin-top: 2rem;
     backdrop-filter: blur(2px);
     font-family: 'Ubuntu', sans-serif;
     font-weight: normal;
-    z-index: 5;
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    white-space: nowrap;
 }
 
-/* КАРТОЧКИ НА ГЛАВНОЙ */
+/* КАРТОЧКИ НА ГЛАВНОЙ — ПО ЦЕНТРУ, ШИРОКИЕ */
 .home-content {
     width: 100%;
-    max-width: 900px;
-    margin-top: 25vh;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    max-width: 1000px;
+    margin: 25vh auto 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 2rem;
-    padding: 0 1rem;
+    flex-wrap: wrap;
+    padding: 0 2rem;
     position: relative;
     z-index: 5;
 }
 
 .nav-card {
+    flex: 1;
+    min-width: 280px;
+    max-width: 350px;
     aspect-ratio: 1 / 1;
-    width: 100%;
     background: #3d405b;
-    padding: 1rem;
+    padding: 1.5rem;
     border-radius: 32px;
     border: 2px solid #5f6382;
     box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.3);
@@ -271,7 +276,7 @@ body.morphing.inner .logo-full {
     text-decoration: none;
     color: #eaeefc;
     font-family: 'Onder', cursive;
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: normal;
     letter-spacing: 0.02em;
     display: flex;
@@ -327,14 +332,34 @@ img {
 }
 
 /* АДАПТИВНОСТЬ */
+@media (max-width: 768px) {
+    .home-content {
+        gap: 1.5rem;
+        padding: 0 1rem;
+    }
+    
+    .nav-card {
+        min-width: 220px;
+        font-size: 2.2rem;
+        padding: 1rem;
+    }
+}
+
 @media (max-width: 600px) {
     .home-content {
         gap: 1rem;
     }
     
     .nav-card {
-        font-size: 2rem;
+        min-width: 180px;
+        font-size: 1.8rem;
         border-radius: 24px;
+    }
+    
+    .page-indicator {
+        font-size: 0.75rem;
+        bottom: 1rem;
+        padding: 0.3rem 1rem;
     }
 }
 
@@ -347,9 +372,9 @@ img {
     }
     .home-content {
         margin-top: 15vh;
-        gap: 1rem;
     }
     .nav-card {
+        min-width: 200px;
         font-size: 2rem;
     }
 }
