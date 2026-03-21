@@ -190,7 +190,7 @@ body.morphing.inner .logo-full {
         transform: translateX(0);
     }
     100% {
-        left: 52.7%;
+        left: 52.4%;
         transform: translateX(-50%);
     }
 }
@@ -230,49 +230,52 @@ body.morphing.inner .logo-full {
 /* КОНТЕНТ */
 .page-indicator {
     color: #b9bff2;
-    font-size: 0.9rem;
+    font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 2px;
     background: rgba(0,0,0,0.2);
-    padding: 0.4rem 1.2rem;
+    padding: 0.5rem 1.5rem;
     border-radius: 40px;
     backdrop-filter: blur(2px);
     font-family: 'Ubuntu', sans-serif;
     font-weight: normal;
     position: fixed;
-    bottom: 2rem;
+    bottom: 1.5rem;
     left: 50%;
     transform: translateX(-50%);
     z-index: 50;
     white-space: nowrap;
 }
 
-/* КАРТОЧКИ НА ГЛАВНОЙ — СЕТКА 2x2, БОЛЬШИЕ, ПО ЦЕНТРУ */
+/* КАРТОЧКИ НА ГЛАВНОЙ — СЕТКА 2x2, СТРОГО ПО ЦЕНТРУ */
 .home-content {
     width: 100%;
-    max-width: 900px;
-    margin: 25vh auto 0;
+    max-width: 1000px;
+    margin: 20vh auto 0;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
-    padding: 0 2rem;
+    padding: 0;
     position: relative;
     z-index: 5;
+    justify-items: center;
+    align-items: center;
 }
 
 .nav-card {
     aspect-ratio: 1 / 1;
     width: 100%;
+    max-width: 450px;
     background: #3d405b;
-    padding: 1.5rem;
-    border-radius: 32px;
+    padding: 2rem;
+    border-radius: 40px;
     border: 2px solid #5f6382;
     box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.3);
     text-align: center;
     text-decoration: none;
     color: #eaeefc;
     font-family: 'Onder', cursive;
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: normal;
     letter-spacing: 0.02em;
     display: flex;
@@ -327,12 +330,23 @@ img {
     cursor: pointer;
 }
 
-/* АДАПТИВНОСТЬ */
-@media (max-width: 768px) {
+/* АДАПТИВНОСТЬ ДЛЯ ПЛАНШЕТА В LANDSCAPE */
+@media (max-width: 1200px) {
     .home-content {
-        max-width: 600px;
+        max-width: 900px;
         gap: 1.5rem;
-        padding: 0 1rem;
+    }
+    
+    .nav-card {
+        font-size: 3rem;
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .home-content {
+        max-width: 800px;
+        gap: 1.5rem;
     }
     
     .nav-card {
@@ -341,36 +355,14 @@ img {
     }
 }
 
-@media (max-width: 550px) {
+@media (max-width: 700px) {
     .home-content {
-        gap: 1rem;
+        max-width: 600px;
+        gap: 1.2rem;
     }
     
-    .nav-card {
-        font-size: 1.8rem;
-        border-radius: 24px;
-    }
-    
-    .page-indicator {
-        font-size: 0.75rem;
-        bottom: 1rem;
-        padding: 0.3rem 1rem;
-    }
-}
-
-@media (orientation: landscape) and (max-height: 600px) {
-    .home .logo-container {
-        top: 1rem;
-    }
-    .inner .logo-container {
-        top: 1rem;
-    }
-    .home-content {
-        margin-top: 15vh;
-        gap: 1.5rem;
-        max-width: 800px;
-    }
     .nav-card {
         font-size: 2rem;
+        border-radius: 32px;
     }
 }
