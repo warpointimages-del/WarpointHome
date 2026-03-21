@@ -7,12 +7,16 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="inner" id="main-page">
+    <div class="page-transition-container">
+        <div class="transition-overlay" id="transitionOverlay"></div>
+    </div>
+    
     <div class="app">
         <div class="logo-container">
             <a href="index.html" class="logo-link" id="logoButton">
                 <div class="logo-svg-wrapper">
-                    <img class="logo-full" src="svgs/logofull.svg" alt="Full logo" draggable="false" onerror="this.style.backgroundColor='#8a6de9';this.style.width='180px';this.style.height='44px';this.style.borderRadius='8px';this.style.background='linear-gradient(90deg, #8a6de9 90px, #b09aff 90px)'">
-                    <img class="logo-short" src="svgs/logoshort.svg" alt="Short logo" draggable="false" onerror="this.style.backgroundColor='#8a6de9';this.style.width='70px';this.style.height='44px';this.style.borderRadius='8px'">
+                    <img class="logo-full" src="svgs/logofull.svg" alt="Full logo" draggable="false">
+                    <img class="logo-short" src="svgs/logoshort.svg" alt="Short logo" draggable="false">
                 </div>
             </a>
         </div>
@@ -27,19 +31,27 @@
     <script>
         (function() {
             const body = document.getElementById('main-page');
-            const logoBtn = document.getElementById('logoButton');
-            
-            window.animateToHome = function(targetUrl) {
-                body.classList.add('morphing');
-                setTimeout(() => {
-                    window.location.href = targetUrl;
-                }, 800);
-                return false;
-            };
+            const overlay = document.getElementById('transitionOverlay');
+            let isTransitioning = false;
 
-            logoBtn.addEventListener('click', (e) => {
+            function navigateToHome() {
+                if (isTransitioning) return;
+                isTransitioning = true;
+                
+                // Запускаем анимацию логотипа
+                body.classList.add('morphing');
+                
+                // Запускаем оверлей
+                overlay.classList.add('active');
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 400);
+            }
+
+            document.getElementById('logoButton').addEventListener('click', (e) => {
                 e.preventDefault();
-                animateToHome('index.html');
+                navigateToHome();
             });
         })();
     </script>
