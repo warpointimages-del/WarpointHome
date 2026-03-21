@@ -247,15 +247,16 @@ body.morphing.inner .logo-full {
     white-space: nowrap;
 }
 
-/* КАРТОЧКИ НА ГЛАВНОЙ — СЕТКА 2x2, СТРОГО ПО ЦЕНТРУ */
+/* КАРТОЧКИ НА ГЛАВНОЙ — БОЛЬШИЕ, БОЛЬШОЙ ШРИФТ, ПРАВИЛЬНЫЕ ОТСТУПЫ */
 .home-content {
     width: 100%;
-    max-width: 1000px;
+    max-width: 1400px;
     margin: 20vh auto 0;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    padding: 0;
+    column-gap: 2rem;
+    row-gap: 4rem;
+    padding: 0 2rem;
     position: relative;
     z-index: 5;
     justify-items: center;
@@ -265,17 +266,17 @@ body.morphing.inner .logo-full {
 .nav-card {
     aspect-ratio: 1 / 1;
     width: 100%;
-    max-width: 450px;
+    max-width: 550px;
     background: #3d405b;
     padding: 2rem;
-    border-radius: 40px;
-    border: 2px solid #5f6382;
-    box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.3);
+    border-radius: 48px;
+    border: 3px solid #5f6382;
+    box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.4);
     text-align: center;
     text-decoration: none;
     color: #eaeefc;
     font-family: 'Onder', cursive;
-    font-size: 3.5rem;
+    font-size: 5rem;
     font-weight: normal;
     letter-spacing: 0.02em;
     display: flex;
@@ -288,13 +289,13 @@ body.morphing.inner .logo-full {
 }
 
 .nav-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 16px -4px rgba(0, 0, 0, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 24px -6px rgba(0, 0, 0, 0.5);
 }
 
 .nav-card:active {
     transform: translateY(0);
-    box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.4);
 }
 
 /* ВНУТРЕННИЕ СТРАНИЦЫ */
@@ -330,39 +331,47 @@ img {
     cursor: pointer;
 }
 
-/* АДАПТИВНОСТЬ ДЛЯ ПЛАНШЕТА В LANDSCAPE */
+/* АДАПТИВНОСТЬ ДЛЯ ПЛАНШЕТА */
 @media (max-width: 1200px) {
     .home-content {
-        max-width: 900px;
-        gap: 1.5rem;
+        max-width: 1100px;
+        column-gap: 1.8rem;
+        row-gap: 3.6rem;
     }
     
     .nav-card {
-        font-size: 3rem;
-        padding: 1.5rem;
+        max-width: 480px;
+        font-size: 4rem;
+        border-radius: 44px;
     }
 }
 
 @media (max-width: 900px) {
     .home-content {
         max-width: 800px;
-        gap: 1.5rem;
+        column-gap: 1.5rem;
+        row-gap: 3rem;
     }
     
     .nav-card {
-        font-size: 2.5rem;
-        padding: 1rem;
+        max-width: 380px;
+        font-size: 3rem;
+        border-radius: 36px;
+        padding: 1.5rem;
     }
 }
 
 @media (max-width: 700px) {
     .home-content {
         max-width: 600px;
-        gap: 1.2rem;
+        column-gap: 1.2rem;
+        row-gap: 2.4rem;
     }
     
     .nav-card {
-        font-size: 2rem;
-        border-radius: 32px;
+        max-width: 280px;
+        font-size: 2.2rem;
+        border-radius: 28px;
+        padding: 1rem;
     }
 }
