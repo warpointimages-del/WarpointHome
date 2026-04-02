@@ -34,7 +34,8 @@
 }
 
 body {
-    background-color: #323549;
+    background-color: #000000;
+    /* background-color: #323549; BG WP Color */
     font-family: 'Ubuntu', system-ui, -apple-system, sans-serif;
     min-height: 100vh;
     color: #eaeefc;
